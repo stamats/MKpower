@@ -1,0 +1,11 @@
+###############################################################################
+## NEWS to package MKpower
+###############################################################################
+
+###########################################################
+## Version 0.1
+###########################################################
+- Start of development
+- Copied functions power.diagnostic.test, power.hsu.t.test,
+  power.nb.test, power.welch.t.test, ssize.pcc from package 
+  MKmisc

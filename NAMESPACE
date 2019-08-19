@@ -1,0 +1,6 @@
+import("stats")
+export(power.diagnostic.test,
+       power.hsu.t.test,
+       power.nb.test,
+       power.welch.t.test,
+       ssize.pcc)
