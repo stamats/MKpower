@@ -1,0 +1,88 @@
+---
+title: "Package MKpower"
+author: "Matthias Kohl"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{MKpower}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{utf8}
+---
+
+
+## Introduction  
+Package MKpower includes a collection of functions for power analysis and sample size calculation.
+
+We first load the package.
+```{r}
+library(MKpower)
+```
+
+
+## Welch Two-Sample t-Test
+For computing the sample size of the Welch t-test, we only consider the situation 
+of equal group size (balanced design).
+```{r}
+## identical results as power.t.test, since sd = sd1 = sd2 = 1
+power.welch.t.test(n = 20, delta = 1)
+power.welch.t.test(power = .90, delta = 1)
+power.welch.t.test(power = .90, delta = 1, alternative = "one.sided")
+
+## sd1 = 0.5, sd2 = 1
+power.welch.t.test(delta = 1, sd1 = 0.5, sd2 = 1, power = 0.9)
+```
+
+
+## Hsu Two-Sample t-Test
+For computing the sample size of the Hsu t-test, we only consider the situation 
+of equal group size (balanced design).
+```{r}
+## slightly more conservative than Welch t-test
+power.hsu.t.test(n = 20, delta = 1)
+power.hsu.t.test(power = .90, delta = 1)
+power.hsu.t.test(power = .90, delta = 1, alternative = "one.sided")
+
+## sd1 = 0.5, sd2 = 1
+power.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
+power.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
+```
+
+
+## Two Negative Binomial Rates
+When we consider two negative binomial rates, we can compute sample size or
+power applying function power.nb.test.
+```{r}
+## examples from Table III in Zhu and Lakkis (2014)
+power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 1)
+power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 2)
+power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 3)
+```
+
+
+## Diagnostic Test
+Given an expected sensitivity and specificity we can compute sample size, 
+power, delta or significance level of diagnostic test.
+```{r}
+## see n2 on page 1202 of Chu and Cole (2007)
+power.diagnostic.test(sens = 0.99, delta = 0.14, power = 0.95) # 40
+power.diagnostic.test(sens = 0.99, delta = 0.13, power = 0.95) # 43
+power.diagnostic.test(sens = 0.99, delta = 0.12, power = 0.95) # 47
+```
+
+The sample size planning for developing binary classifiers in case of high
+dimensional data, we can apply function ssize.pcc, which is based on the 
+probability of correct classification (PCC).
+```{r}
+## see Table 2 of Dobbin et al. (2008)
+g <- 0.1
+fc <- 1.6
+ssize.pcc(gamma = g, stdFC = fc, nrFeatures = 22000)
+```
+
+
+## sessionInfo
+```{r}
+sessionInfo()
+```
