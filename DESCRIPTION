@@ -9,7 +9,7 @@ Author: Matthias Kohl [aut, cre] (0000-0001-9514-8910)
 Maintainer: Matthias Kohl <Matthias.Kohl@stamats.de>
 Depends: R(>= 3.5.0)
 Imports: stats
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown, MKmisc
 VignetteBuilder: knitr
 Description: Contains several functions for power analysis and sample size calculation.
 License: LGPL-3
