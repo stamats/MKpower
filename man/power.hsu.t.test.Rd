@@ -70,7 +70,7 @@ power.hsu.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
  power.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
 
  \donttest{
- if(require(MKmisc)){
+ if(require(MKinfer)){
  ## empirical check
  M <- 10000
  ps <- numeric(M)
