@@ -65,20 +65,20 @@ power.welch.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
  power.welch.t.test(power = .90, delta = 1)
  power.welch.t.test(power = .90, delta = 1, alternative = "one.sided")
 
- ## sd1 = 0.5, sd2 = 1
- power.welch.t.test(delta = 1, sd1 = 0.5, sd2 = 1, power = 0.9)
+  ## sd1 = 0.5, sd2 = 1
+ power.welch.t.test(delta = 2, sd1 = 0.5, sd2 = 1, power = 0.9)
 
  \donttest{
  ## empirical check
  M <- 10000
- ps <- numeric(M)
+ pvals.welch <- numeric(M)
  for(i in seq_len(M)){
-   x <- rnorm(15, mean = 0, sd = 0.5)
-   y <- rnorm(15, mean = 1, sd = 1.0)
-   ps[i] <- t.test(x, y)$p.value
+   x <- rnorm(5, mean = 0, sd = 0.5)
+   y <- rnorm(5, mean = 2, sd = 1.0)
+   pvals.welch[i] <- t.test(x, y)$p.value
  }
  ## empirical power
- sum(ps < 0.05)/M
+ sum(pvals.welch < 0.05)/M
  }
 }
 \keyword{htest}
