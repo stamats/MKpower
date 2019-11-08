@@ -3,19 +3,19 @@
 \alias{MKpower}
 \docType{package}
 \title{
-Functions for Power Analysis.
+Power Analysis and Sample Size Calculation.
 }
 \description{
-Contains several functions for power analysis and sample size calculation.
+Functions for power analysis and sample size calculation. Examples are Welch and Hsu t-Tests, Wilcoxon Rank Sum and Signed Rank Tests as well as power and sample size required for the evaluation of a diagnostic test(-system).
 }
 \details{
 \tabular{ll}{
 Package: \tab MKpower\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2019-08-19\cr
+Version: \tab 0.2\cr
+Date: \tab 2019-11-08\cr
 Depends: \tab R(>= 3.5.0)\cr
-Imports: \tab stats\cr
+Imports: \tab stats, matrixTests\cr
 Suggests: \tab knitr, rmarkdown\cr
 License: \tab LGPL-3\cr
 URL: \tab http://www.stamats.de/\cr

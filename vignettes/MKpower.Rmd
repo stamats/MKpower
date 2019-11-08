@@ -13,7 +13,10 @@ vignette: >
 
 
 ## Introduction  
-Package MKpower includes a collection of functions for power analysis and sample size calculation.
+The package includes functions for power analysis and sample size calculation. 
+Examples are Welch and Hsu t-Tests, Wilcoxon Rank Sum and Signed Rank Tests 
+as well as power and sample size required for the evaluation of a diagnostic 
+test(-system).
 
 We first load the package.
 ```{r}
@@ -48,6 +51,37 @@ power.hsu.t.test(power = .90, delta = 1, alternative = "one.sided")
 power.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
 power.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
 ```
+
+
+## Wilcoxon Rank Sum and Signed Rank Tests
+For computing the sample size of these tests, we offer a function that 
+performs Monte-Carlo simulations to determine their (empirical) power.
+```{r}
+rx <- function(n) rnorm(n, mean = 0, sd = 1) 
+ry <- function(n) rnorm(n, mean = 0.5, sd = 1) 
+## two-sample
+sim.power.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
+sim.power.wilcox.test(rx = rx, ry = ry, n.min = 65, n.max = 70, 
+                      step.size = 1, iter = 1000, BREAK = FALSE)
+power.t.test(delta = 0.5, power = 0.8)
+
+## one-sample
+sim.power.wilcox.test(rx = ry, n.max = 100, iter = 1000, type = "one.sample")
+sim.power.wilcox.test(rx = ry, type = "one.sample", n.min = 33, 
+                      n.max = 38, step.size = 1, iter = 1000, BREAK = FALSE)
+power.t.test(delta = 0.5, power = 0.8, type = "one.sample")
+
+## two-sample
+rx <- function(n) rgamma(n, scale = 2, shape = 1.5)
+ry <- function(n) rgamma(n, scale = 4, shape = 1.5) # equal shape
+## two-sample
+sim.power.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
+sim.power.wilcox.test(rx = rx, ry = ry, n.min = 25, n.max = 30, 
+                      step.size = 1, iter = 1000, BREAK = FALSE)
+```
+
+For pratical applications we recommend to use a higher number of iterations. 
+More detailed examples we refer to the help page of the function.
 
 
 ## Two Negative Binomial Rates

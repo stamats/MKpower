@@ -2,7 +2,9 @@
 The repository includes the development version of R package MKpower
 
 ## Description
-The package contains several functions for sample size calculation and power analysis.
+Functions for power analysis and sample size calculation. Examples are Welch 
+and Hsu t-Tests, Wilcoxon Rank Sum and Signed Rank Tests as well as power and 
+sample size required for the evaluation of a diagnostic test(-system).
 
 ## Installation
 

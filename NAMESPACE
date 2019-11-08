@@ -1,6 +1,8 @@
 import("stats")
+importFrom("matrixTests", "col_wilcoxon_twosample", "col_wilcoxon_onesample")
 export(power.diagnostic.test,
        power.hsu.t.test,
        power.nb.test,
        power.welch.t.test,
+       sim.power.wilcox.test,
        ssize.pcc)
