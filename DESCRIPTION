@@ -1,6 +1,6 @@
 Package: MKpower
 Version: 0.2
-Date: 2019-11-08
+Date: 2019-11-30
 Title: Power Analysis and Sample Size Calculation
 Authors@R: person("Matthias", "Kohl", role = c("aut", "cre"),
                   email = "Matthias.Kohl@stamats.de", 
@@ -8,7 +8,7 @@ Authors@R: person("Matthias", "Kohl", role = c("aut", "cre"),
 Author: Matthias Kohl [aut, cre] (0000-0001-9514-8910)
 Maintainer: Matthias Kohl <Matthias.Kohl@stamats.de>
 Depends: R(>= 3.5.0)
-Imports: stats, matrixTests
+Imports: stats, matrixTests, exactRankTests
 Suggests: knitr, rmarkdown, MKinfer
 VignetteBuilder: knitr
 Description: Functions for power analysis and sample size calculation. Examples are Welch and Hsu t-Tests, Wilcoxon Rank Sum and Signed Rank Tests as well as power and sample size required for the evaluation of a diagnostic test(-system).

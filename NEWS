@@ -7,6 +7,10 @@
 ###########################################################
 - added function sim.power.wilcox.test for determining the power of the
   Wilcoxon rank sum and signed rank tests by Monte-Carlo simulations.
+- added function power.prop1.test for computing the power for a one-sample test 
+  for Proportions
+- added function ssize.propCI for computing the sample size for a two-sided
+  confidence interval of a single proportion
 
 ###########################################################
 ## Version 0.1

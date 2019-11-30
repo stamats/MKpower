@@ -13,7 +13,7 @@ Functions for power analysis and sample size calculation. Examples are Welch and
 Package: \tab MKpower\cr
 Type: \tab Package\cr
 Version: \tab 0.2\cr
-Date: \tab 2019-11-08\cr
+Date: \tab 2019-11-30\cr
 Depends: \tab R(>= 3.5.0)\cr
 Imports: \tab stats, matrixTests\cr
 Suggests: \tab knitr, rmarkdown\cr
