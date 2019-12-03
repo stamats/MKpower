@@ -1,11 +1,11 @@
 import("stats")
-importFrom("matrixTests", "col_wilcoxon_twosample", "col_wilcoxon_onesample")
+importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample")
 importFrom("exactRankTests", "qperm")
 export(power.diagnostic.test,
        power.hsu.t.test,
        power.nb.test,
        power.prop1.test,
        power.welch.t.test,
-       sim.power.wilcox.test,
+       sim.ssize.wilcox.test,
        ssize.pcc,
        ssize.propCI)

@@ -24,6 +24,9 @@ library(MKpower)
 ```
 
 
+## Single Proportion
+
+
 ## Welch Two-Sample t-Test
 For computing the sample size of the Welch t-test, we only consider the situation 
 of equal group size (balanced design).
@@ -60,14 +63,14 @@ performs Monte-Carlo simulations to determine their (empirical) power.
 rx <- function(n) rnorm(n, mean = 0, sd = 1) 
 ry <- function(n) rnorm(n, mean = 0.5, sd = 1) 
 ## two-sample
-sim.power.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
-sim.power.wilcox.test(rx = rx, ry = ry, n.min = 65, n.max = 70, 
+sim.ssize.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
+sim.ssize.wilcox.test(rx = rx, ry = ry, n.min = 65, n.max = 70, 
                       step.size = 1, iter = 1000, BREAK = FALSE)
 power.t.test(delta = 0.5, power = 0.8)
 
 ## one-sample
-sim.power.wilcox.test(rx = ry, n.max = 100, iter = 1000, type = "one.sample")
-sim.power.wilcox.test(rx = ry, type = "one.sample", n.min = 33, 
+sim.ssize.wilcox.test(rx = ry, n.max = 100, iter = 1000, type = "one.sample")
+sim.ssize.wilcox.test(rx = ry, type = "one.sample", n.min = 33, 
                       n.max = 38, step.size = 1, iter = 1000, BREAK = FALSE)
 power.t.test(delta = 0.5, power = 0.8, type = "one.sample")
 
@@ -75,8 +78,8 @@ power.t.test(delta = 0.5, power = 0.8, type = "one.sample")
 rx <- function(n) rgamma(n, scale = 2, shape = 1.5)
 ry <- function(n) rgamma(n, scale = 4, shape = 1.5) # equal shape
 ## two-sample
-sim.power.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
-sim.power.wilcox.test(rx = rx, ry = ry, n.min = 25, n.max = 30, 
+sim.ssize.wilcox.test(rx = rx, ry = ry, n.max = 100, iter = 1000)
+sim.ssize.wilcox.test(rx = rx, ry = ry, n.min = 25, n.max = 30, 
                       step.size = 1, iter = 1000, BREAK = FALSE)
 ```
 
