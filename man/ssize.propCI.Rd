@@ -6,8 +6,7 @@
   Compute the sample size for the two-sided confidence interval of a single proportion.
 }
 \usage{
-ssize.propCI(prob, width, conf.level = 0.95,  method = "wald-cc"){
-
+ssize.propCI(prop, width, conf.level = 0.95,  method = "wald-cc")
 }
 \arguments{
   \item{prop}{expected proportion}
@@ -33,7 +32,7 @@ ssize.propCI(prob, width, conf.level = 0.95,  method = "wald-cc"){
   Wiley Series in Probability and Statistics.
 }
 
-\seealso{\code{\link{power.prop1.test}}, \code{\link{binomCI}}}
+\seealso{\code{\link{power.prop1.test}}, \code{\link[MKinfer]{binomCI}}}
 
 \examples{
 ssize.propCI(prop = 0.3, width = 0.1)

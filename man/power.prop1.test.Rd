@@ -8,7 +8,8 @@
 }
 \usage{
 power.prop1.test(n = NULL, p1 = NULL, p0 = 0.5, sig.level = 0.05, 
-                             power = NULL, alternative = c("two.sided", "less", "greater"),
+                             power = NULL, 
+                             alternative = c("two.sided", "less", "greater"),
                              cont.corr = TRUE, tol = .Machine$double.eps^0.25)
 }
 \arguments{
@@ -57,17 +58,22 @@ power.prop1.test(p1 = 0.4, power = 0.8, cont.corr = FALSE)
 power.prop1.test(p1 = 0.6, power = 0.8)
 power.prop1.test(n = 204, power = 0.8)
 power.prop1.test(n = 204, p1 = 0.4, power = 0.8, sig.level = NULL)
-power.prop1.test(n = 194, p1 = 0.4, power = 0.8, sig.level = NULL, cont.corr = FALSE)
+power.prop1.test(n = 194, p1 = 0.4, power = 0.8, sig.level = NULL, 
+                 cont.corr = FALSE)
 
 power.prop1.test(p1 = 0.1, p0 = 0.3, power = 0.8, alternative = "less")
-power.prop1.test(p1 = 0.1, p0 = 0.3, power = 0.8, alternative = "less", cont.corr = FALSE)
+power.prop1.test(p1 = 0.1, p0 = 0.3, power = 0.8, alternative = "less", 
+                 cont.corr = FALSE)
 power.prop1.test(n = 31, p0 = 0.3, power = 0.8, alternative = "less")
-power.prop1.test(n = 31, p1 = 0.1, p0 = 0.3, power = 0.8, sig.level = NULL, alternative = "less")
+power.prop1.test(n = 31, p1 = 0.1, p0 = 0.3, power = 0.8, sig.level = NULL, 
+                 alternative = "less")
 
 
 power.prop1.test(p1 = 0.5, p0 = 0.3, power = 0.8, alternative = "greater")
-power.prop1.test(p1 = 0.5, p0 = 0.3, power = 0.8, alternative = "greater", cont.corr = FALSE)
+power.prop1.test(p1 = 0.5, p0 = 0.3, power = 0.8, alternative = "greater", 
+                 cont.corr = FALSE)
 power.prop1.test(n = 40, p0 = 0.3, power = 0.8, alternative = "greater")
-power.prop1.test(n = 40, p1 = 0.5, p0 = 0.3, power = 0.8, sig.level = NULL, alternative = "greater")
+power.prop1.test(n = 40, p1 = 0.5, p0 = 0.3, power = 0.8, sig.level = NULL, 
+                 alternative = "greater")
 }
 \keyword{ htest }
