@@ -2,11 +2,11 @@
 \alias{sim.ssize.wilcox.test}
 \title{Sample Size for Wilcoxon Rank Sum and Signed Rank Tests}
 \usage{
-sim.power.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
-                 type = c("two.sample", "one.sample", "paired"), 
-                 alternative = c("two.sided", "less", "greater"),
-                 n.min = 10, n.max = 200, step.size = 10, 
-                 iter = 10000, BREAK = TRUE)
+sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
+                      type = c("two.sample", "one.sample", "paired"), 
+                      alternative = c("two.sided", "less", "greater"),
+                      n.min = 10, n.max = 200, step.size = 10, 
+                      iter = 10000, BREAK = TRUE)
 }
 \arguments{
  \item{rx}{ function to simulate the values of x, respectively x-y in the paired case.}
