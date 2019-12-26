@@ -2,11 +2,11 @@
 \alias{sim.ssize.wilcox.test}
 \title{Sample Size for Wilcoxon Rank Sum and Signed Rank Tests}
 \usage{
-sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
-                      type = c("two.sample", "one.sample", "paired"), 
-                      alternative = c("two.sided", "less", "greater"),
-                      n.min = 10, n.max = 200, step.size = 10, 
-                      iter = 10000, BREAK = TRUE)
+sim.power.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
+                 type = c("two.sample", "one.sample", "paired"), 
+                 alternative = c("two.sided", "less", "greater"),
+                 n.min = 10, n.max = 200, step.size = 10, 
+                 iter = 10000, BREAK = TRUE)
 }
 \arguments{
  \item{rx}{ function to simulate the values of x, respectively x-y in the paired case.}
@@ -30,7 +30,7 @@ sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
 
 \details{
   Functions \code{rx} and \code{ry} are used to simulate the data and 
-  functions \code{col_wilcoxon_twosample} and \code{col_wilcoxon_onesample}
+  functions \code{row_wilcoxon_twosample} and \code{row_wilcoxon_onesample}
   are used to efficiently compute the p values of the respective test.
   
   We recommend a two steps procedure: In the first step, start with a wide grid 
