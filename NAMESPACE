@@ -1,11 +1,23 @@
 import("stats")
-importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample")
-importFrom("exactRankTests", "qperm")
+importFrom("ggplot2", "ggplot", "aes_string", "geom_histogram", 
+                      "geom_hline", "facet_grid", "labs", "geom_hex", 
+                      "geom_line", "geom_text", "geom_vline", "xlab", 
+                      "ylab", "geom_point")
+importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample",
+                          "row_t_equalvar", "row_t_welch")
+importFrom("MKdescr", "scale_y_neglog10")
+importFrom("MKinfer", "volcano")
+importFrom("qqplotr", "stat_qq_point", "stat_qq_line")
 export(power.diagnostic.test,
        power.hsu.t.test,
        power.nb.test,
        power.prop1.test,
        power.welch.t.test,
+       sim.power.t.test,
        sim.ssize.wilcox.test,
        ssize.pcc,
        ssize.propCI)
+
+S3method(print, sim.power.ttest)
+S3method(hist, sim.power.ttest)
+S3method(volcano, sim.power.ttest)

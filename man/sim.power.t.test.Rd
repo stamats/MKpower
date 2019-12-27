@@ -60,7 +60,6 @@ power.hsu.t.test(n = 5, delta = 2)
 sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm,
                  ny = 5, ry = function(x) rnorm(x, mean = 2), ry.H0 = rnorm)
 
-\donttest{
 ## Equal variance, moderate sample size
 power.t.test(n = 25, delta = 0.8)
 power.welch.t.test(n = 25, delta = 0.8)
@@ -110,24 +109,11 @@ sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm,
 sim.power.t.test(nx = 25, rx = rnorm, rx.H0 = rnorm, 
                  ny = 50, ry = function(x) rnorm(x, mean = 1.5, sd = 3), 
                  ry.H0 = function(x) rnorm(x, sd = 3))
-sim.power.t.test(nx = 25, rx = rnorm, rx.H0 = rnorm, 
-                 ny = 50, ry = function(x) rnorm(x, mean = 1.5, sd = 3), 
-                 ry.H0 = function(x) rnorm(x, sd = 3))
 
 ## Unequal variance, unequal sample sizes
 ## high sample sizes
 sim.power.t.test(nx = 100, rx = rnorm, rx.H0 = rnorm, 
                  ny = 200, ry = function(x) rnorm(x, mean = 0.6, sd = 3), 
                  ry.H0 = function(x) rnorm(x, sd = 3))
-sim.power.t.test(nx = 100, rx = rnorm, rx.H0 = rnorm, 
-                 ny = 200, ry = function(x) rnorm(x, mean = 0.6, sd = 3), 
-                 ry.H0 = function(x) rnorm(x, sd = 3))
-
-## non-normal, moderate sample size
-sim.power.t.test(nx = 40, rx = function(x) rt(x, df = 1), 
-                 rx.H0 = function(x) rt(x, df = 1), 
-                 ny = 20, ry = function(x) rt(x, df = 4) + 3.5, 
-                 ry.H0 = function(x) rt(x, df = 4))
-}
 }
 \keyword{htest}
