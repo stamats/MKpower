@@ -5,12 +5,18 @@
 ###########################################################
 ## Version 0.2
 ###########################################################
-- added function sim.power.wilcox.test for determining the power of the
-  Wilcoxon rank sum and signed rank tests by Monte-Carlo simulations.
+- added function sim.ssize.wilcox.test for determining sample size and power 
+  of the Wilcoxon rank sum and signed rank tests by Monte-Carlo simulations.
 - added function power.prop1.test for computing the power for a one-sample test 
-  for Proportions
+  for Proportions.
 - added function ssize.propCI for computing the sample size for a two-sided
-  confidence interval of a single proportion
+  confidence interval of a single proportion.
+- added function sim.power.t.test for simulation power and type-I-error of
+  classical, Welch and Hsu t-tests.
+- added methods for hist, qqunif and volcano to visualize the results of 
+  power and type-I-error simulations.
+- added function sim.power.wilcox.test for simulation power and type-I-error of
+  exact, asymptotic and approximate Wilcoxon-Mann-Whitney tests.
 
 ###########################################################
 ## Version 0.1
