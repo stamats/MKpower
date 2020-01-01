@@ -7,6 +7,8 @@
 }
 \usage{
 \S3method{hist}{sim.power.ttest}(x, color.hline = "orange", \dots)
+
+\S3method{hist}{sim.power.wtest}(x, color.hline = "orange", \dots)
 }
 \arguments{
   \item{x}{ object of class \code{sim.power.ttest}.}
@@ -26,9 +28,13 @@
 %\note{}
 \seealso{\code{\link[graphics]{hist}}}
 \examples{
-res <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
+res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
                         ry.H0 = function(x) rnorm(x, sd = 3))
-hist(res)
+hist(res1)
+res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
+                      ny = 6, ry = function(x) rnorm(x, mean = 2), 
+                      ry.H0 = rnorm)
+hist(res2)
 }
 \keyword{hplot}
