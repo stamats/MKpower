@@ -23,19 +23,19 @@ sim.power.wilcox.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
  \item{conf.int}{ logical, shall confidence intervals be computed. 
  Strongly increases computation time!}
  \item{approximate}{ logical, shall an approximate test be computed; 
- see \code{\link[coin]{wilcox_test}}. Increases computation time!}
+ see \code{\link[coin]{LocationTests}}. Increases computation time!}
  \item{ties}{ logical, indicating whether ties may occur. Increases computation time!}
  \item{iter}{ single positive integer, number of interations of the simulations.}
  \item{nresample}{ single positive integer, the number of Monte Carlo replicates 
  used for the computation of the approximative reference distribution; 
- see \code{\link[coin]{approximate}}.}
+ see \code{\link[coin]{NullDistribution}}.}
  \item{parallel}{ a character, the type of parallel operation: either \code{"no"} 
- (default), \code{"multicore"} or \code{"snow"}; see \code{\link[coin]{approximate}}.}
+ (default), \code{"multicore"} or \code{"snow"}; see \code{\link[coin]{NullDistribution}}.}
  \item{ncpus}{ a single integer, the number of processes to be used in parallel operation. 
- Defaults to 1L; see \code{\link[coin]{approximate}}.}
+ Defaults to 1L; see \code{\link[coin]{NullDistribution}}.}
  \item{cl}{ an object inheriting from class \code{"cluster"}, specifying an optional 
  parallel or snow cluster if \code{parallel = "snow"}. Defaults to NULL; see 
- \code{\link[coin]{approximate}}.}
+ \code{\link[coin]{NullDistribution}}.}
 }
 \details{
   Functions \code{rx} and \code{ry} are used to simulate the data under the
@@ -60,7 +60,7 @@ sim.power.wilcox.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   \emph{Biometrics Bulletin}, \bold{1}, 80-83.
 }
 \author{Matthias Kohl \email{Matthias.Kohl@stamats.de}}
-\seealso{\code{\link[stats]{wilcox.test}}, \code{\link[coin]{wilcox_test}}, 
+\seealso{\code{\link[stats]{wilcox.test}}, \code{\link[coin]{LocationTests}}, 
 \code{\link[matrixTests]{wilcoxon}}}
 \examples{
 ## Equal variance, small sample size
