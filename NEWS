@@ -16,7 +16,8 @@
 - added methods for hist, qqunif and volcano to visualize the results of 
   power and type-I-error simulations.
 - added function sim.power.wilcox.test for simulation power and type-I-error of
-  exact, asymptotic and approximate Wilcoxon-Mann-Whitney tests.
+  exact, asymptotic and approximate Wilcoxon-Mann-Whitney tests as well as
+  methods for hist, qqunif and volcano.
 
 ###########################################################
 ## Version 0.1

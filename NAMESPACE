@@ -8,6 +8,7 @@ importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample",
 importFrom("MKdescr", "scale_y_neglog10")
 importFrom("MKinfer", "volcano")
 importFrom("qqplotr", "stat_qq_point", "stat_qq_line", "stat_qq_band")
+importFrom("coin", "wilcox_test", "pvalue", "statistic", "confint")
 export(power.diagnostic.test,
        power.hsu.t.test,
        power.nb.test,
@@ -22,7 +23,11 @@ export(power.diagnostic.test,
        volcano)
 
 S3method(print, sim.power.ttest)
+S3method(print, sim.power.wtest)
 S3method(hist, sim.power.ttest)
+S3method(hist, sim.power.wtest)
 S3method(qqunif, default)
 S3method(qqunif, sim.power.ttest)
+S3method(qqunif, sim.power.wtest)
 S3method(volcano, sim.power.ttest)
+S3method(volcano, sim.power.wtest)

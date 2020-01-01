@@ -21,9 +21,9 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 Package: \tab MKpower\cr
 Type: \tab Package\cr
 Version: \tab 0.2\cr
-Date: \tab 2019-12-31\cr
+Date: \tab 2020-01-01\cr
 Depends: \tab R(>= 3.5.0)\cr
-Imports: \tab stats, matrixTests, ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr\cr
+Imports: \tab stats, matrixTests, ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr
 License: \tab LGPL-3\cr
 URL: \tab http://www.stamats.de/\cr
