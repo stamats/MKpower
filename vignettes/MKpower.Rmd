@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: true
+bibliography: MKpower.bib
 vignette: >
   %\VignetteIndexEntry{MKpower}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,11 +13,15 @@ vignette: >
 ---
 
 
-## Introduction  
-The package includes functions for power analysis and sample size calculation. 
-Examples are Welch and Hsu t-Tests, Wilcoxon Rank Sum and Signed Rank Tests 
-as well as power and sample size required for the evaluation of a diagnostic 
-test(-system).
+## Introduction
+The package includes functions for power analysis and sample size calculation 
+for Welch and Hsu [@Hedderich2018] t tests including Monte-Carlo simulations 
+of empirical power and type-I-error. In addition, power and sample size calculation 
+for Wilcoxon rank sum and signed rank tests via Monte-Carlo simulations can 
+be performed. Moreover, power and sample size required for the evaluation of a 
+diagnostic test(-system) [@Flahault2005; @Dobbin2007] as well as for a single 
+proportion [@Fleiss2003] and comparing two negative binomial rates [@Zhu2014] 
+can be calculated.
 
 We first load the package.
 ```{r}
@@ -25,6 +30,23 @@ library(MKpower)
 
 
 ## Single Proportion
+The computation of the required sample size for investigating a single proportion
+can be determined via the respective test or confidence interval [@Fleiss2003]. 
+First, we consider the asymptotic test.
+```{r}
+## with continuity correction
+power.prop1.test(p1 = 0.4, power = 0.8)
+## without continuity correction
+power.prop1.test(p1 = 0.4, power = 0.8, cont.corr = FALSE)
+```
+
+Next, we compute the sample size via the respective asymptotic confidence interval.
+```{r}
+## with continuity correction
+ssize.propCI(prop = 0.4, width = 0.14)
+## without continuity correction
+ssize.propCI(prop = 0.4, width = 0.14, method = "wald")
+```
 
 
 ## Welch Two-Sample t-Test
@@ -42,8 +64,8 @@ power.welch.t.test(delta = 1, sd1 = 0.5, sd2 = 1, power = 0.9)
 
 
 ## Hsu Two-Sample t-Test
-For computing the sample size of the Hsu t-test, we only consider the situation 
-of equal group size (balanced design).
+For computing the sample size of the Hsu t-test [@Hedderich2018], we only consider 
+the situation of equal group size (balanced design).
 ```{r}
 ## slightly more conservative than Welch t-test
 power.hsu.t.test(n = 20, delta = 1)
@@ -84,12 +106,12 @@ sim.ssize.wilcox.test(rx = rx, ry = ry, n.min = 25, n.max = 30,
 ```
 
 For pratical applications we recommend to use a higher number of iterations. 
-More detailed examples we refer to the help page of the function.
+For more detailed examples we refer to the help page of the function.
 
 
 ## Two Negative Binomial Rates
-When we consider two negative binomial rates, we can compute sample size or
-power applying function power.nb.test.
+When we consider two negative binomial rates [@Zhu2014], we can compute sample 
+size or power applying function power.nb.test.
 ```{r}
 ## examples from Table III in Zhu and Lakkis (2014)
 power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 1)
@@ -100,7 +122,7 @@ power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, app
 
 ## Diagnostic Test
 Given an expected sensitivity and specificity we can compute sample size, 
-power, delta or significance level of diagnostic test.
+power, delta or significance level of diagnostic test [@Flahault2005].
 ```{r}
 ## see n2 on page 1202 of Chu and Cole (2007)
 power.diagnostic.test(sens = 0.99, delta = 0.14, power = 0.95) # 40
@@ -110,7 +132,7 @@ power.diagnostic.test(sens = 0.99, delta = 0.12, power = 0.95) # 47
 
 The sample size planning for developing binary classifiers in case of high
 dimensional data, we can apply function ssize.pcc, which is based on the 
-probability of correct classification (PCC).
+probability of correct classification (PCC) [@Dobbin2007].
 ```{r}
 ## see Table 2 of Dobbin et al. (2008)
 g <- 0.1
@@ -119,7 +141,58 @@ ssize.pcc(gamma = g, stdFC = fc, nrFeatures = 22000)
 ```
 
 
+## Power and Type-I-Error Simulations
+There are quite some discussions and various proposals, which test is the best 
+under which circumstances when we want to compare the location (mean, median) 
+of two groups [@Fagerland2009; @Fagerland2012; @Sezer2017]. In addition, it is 
+questioned whether pre-testing of assumptions is appropriate/useful at least from 
+a practical point of view [@Zimmerman2004; @Rasch2011; @Rochon2012; @Hoekstra2012].
+
+We provide functions to simulate power and type-I-error of classical [@student1908], 
+Welch [@Welch1947] and Hsu [@Hsu1938] t-tests as well as of Wilcoxon-Mann-Whitney
+tests [@Wilcoxon1945; @Mann1947].
+```{r}
+## functions to simulate the data
+## group 1
+rx <- function(n) rnorm(n, mean = 0, sd = 1)
+rx.H0 <- rx
+## group 2
+ry <- function(n) rnorm(n, mean = 3, sd = 3)
+ry.H0 <- function(n) rnorm(n, mean = 0, sd = 3)
+## theoretical results
+power.welch.t.test(n = 10, delta = 3, sd1 = 1, sd2 = 3)
+power.hsu.t.test(n = 10, delta = 3, sd1 = 1, sd2 = 3)
+## simulation
+res.t <- sim.power.t.test(nx = 10, rx = rx, rx.H0 = rx.H0,
+                          ny = 10, ry = ry, ry.H0 = ry.H0)
+res.t
+res.w <- sim.power.wilcox.test(nx = 10, rx = rx, rx.H0 = rx.H0,
+                               ny = 10, ry = ry, ry.H0 = ry.H0)
+res.w
+```
+
+For further investigation of the results, we provide some diagnostic plots.
+```{r, fig.width=7, fig.height=7}
+## t-tests
+hist(res.t)
+qqunif(res.t, alpha = 0.05)
+volcano(res.t, hex = TRUE)
+##  Wilcoxon-Mann-Whitney tests
+hist(res.w)
+qqunif(res.w, alpha = 0.05)
+```
+
+We can also generate a volcano plot for the Wilcoxon-Mann-Whitney test, but this
+would require setting argument <tt>conf.int</tt> to <tt>TRUE</tt>, which would
+lead to a much higher computation time, hence we omitted it here. Furthermore,
+it is also possible to compute an approximate version of the test by setting
+argument <tt>approximate</tt> to <tt>TRUE</tt> [@Hothorn2008] again by the cost
+of an increased computation time. 
+
 ## sessionInfo
 ```{r}
 sessionInfo()
 ```
+
+
+## References
