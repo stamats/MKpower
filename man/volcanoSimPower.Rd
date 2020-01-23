@@ -47,10 +47,12 @@ res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm,
                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
                         ry.H0 = function(x) rnorm(x, sd = 3))
 volcano(res1)
+\donttest{
 ## low number of iterations to reduce computation time
 res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
-                      ry.H0 = rnorm, iter = 20, conf.int = TRUE)
+                      ry.H0 = rnorm, iter = 100, conf.int = TRUE)
 volcano(res2)
+}
 }
 \keyword{hplot}

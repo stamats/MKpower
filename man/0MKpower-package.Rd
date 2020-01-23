@@ -21,8 +21,8 @@ two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5947>).
 \tabular{ll}{
 Package: \tab MKpower\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2020-01-02\cr
+Version: \tab 0.4\cr
+Date: \tab 2020-01-23\cr
 Depends: \tab R(>= 3.5.0)\cr
 Imports: \tab stats, matrixTests, ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr

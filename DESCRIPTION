@@ -1,6 +1,6 @@
 Package: MKpower
-Version: 0.3
-Date: 2020-01-02
+Version: 0.4
+Date: 2020-01-23
 Title: Power Analysis and Sample Size Calculation
 Authors@R: person("Matthias", "Kohl", role = c("aut", "cre"),
                   email = "Matthias.Kohl@stamats.de", 
