@@ -3,6 +3,8 @@ The repository includes the development version of R package MKpower
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MKpower)](http://cran.r-project.org/package=MKpower)
+[![cran checks](https://cranchecks.info/badges/summary/MKpower)](https://cran.r-project.org/web/checks/check_results_MKpower.html)
 
 ## Description
 Power analysis and sample size calculation for Welch and Hsu 
