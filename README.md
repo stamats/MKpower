@@ -20,6 +20,9 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 ## Installation
 
 ```{r, eval = FALSE}
+## Installation of CRAN version
+install.packages("MKpower")
+
 ## Development version from GitHub
 # install.packages("remotes")
 remotes::install_github("stamats/MKpower")
