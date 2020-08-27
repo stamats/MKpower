@@ -14,7 +14,8 @@ size calculation for Wilcoxon rank sum and signed rank tests via Monte-Carlo
 simulations. Power and sample size required for the evaluation of a diagnostic 
 test(-system) (Flahault et al. (2005), <doi:10.1016/j.jclinepi.2004.12.009>; 
 Dobbin and Simon (2007), <doi:10.1093/biostatistics/kxj036>) as well as for a 
-single proportion (Fleiss et al. (2003), ISBN:978-0-471-52629-2) and 
+single proportion (Fleiss et al. (2003), ISBN:978-0-471-52629-2; Piegorsch (2004), 
+<doi:10.1016/j.csda.2003.10.002>; Thulin (2014), <doi:10.1214/14-ejs909>) and 
 comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5947>).
 
 ## Installation
@@ -23,8 +24,8 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 ## Installation of CRAN version
 install.packages("MKpower")
 
-## Development version from GitHub
-# install.packages("remotes")
+## Installation of development version from GitHub
+if(!require("remotes")) install.packages("remotes")
 remotes::install_github("stamats/MKpower")
 ```
 
