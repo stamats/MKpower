@@ -3,9 +3,16 @@
 ###############################################################################
 
 ###########################################################
-## Version 0.3
+## Version 0.5
+###########################################################
+- added new methods to function ssize.propCI contributed by Måns Thulin.
+
+
+###########################################################
+## Version 0.3 + 0.4
 ###########################################################
 - minor changes to description requested by CRAN
+
 
 ###########################################################
 ## Version 0.2
@@ -23,6 +30,7 @@
 - added function sim.power.wilcox.test for simulation power and type-I-error of
   exact, asymptotic and approximate Wilcoxon-Mann-Whitney tests as well as
   methods for hist, qqunif and volcano.
+
 
 ###########################################################
 ## Version 0.1
