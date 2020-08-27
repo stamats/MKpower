@@ -20,17 +20,27 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 
 ## Installation
 
-```{r, eval = FALSE}
-## Installation of CRAN version
-install.packages("MKpower")
+### CRAN version
 
-## Installation of development version from GitHub
+```{r, eval = FALSE}
+install.packages("MKpower")
+```
+
+
+## Development version from GitHub
+
+```{r, eval = FALSE}
 if(!require("remotes")) install.packages("remotes")
 remotes::install_github("stamats/MKpower")
 ```
+
 
 ## Getting started
 
 ```{r}
 library(MKpower)
+```
+
+```{r}
+vignette("MKpower"")
 ```
