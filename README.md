@@ -27,7 +27,7 @@ install.packages("MKpower")
 ```
 
 
-## Development version from GitHub
+### Development version from GitHub
 
 ```{r, eval = FALSE}
 if(!require("remotes")) install.packages("remotes")
