@@ -23,7 +23,7 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 Package: \tab MKpower\cr
 Type: \tab Package\cr
 Version: \tab 0.5\cr
-Date: \tab 2020-08-27\cr
+Date: \tab 2020-11-27\cr
 Depends: \tab R(>= 3.5.0)\cr
 Imports: \tab stats, matrixTests, ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr
