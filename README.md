@@ -42,5 +42,5 @@ library(MKpower)
 ```
 
 ```{r}
-vignette("MKpower"")
+vignette("MKpower")
 ```
