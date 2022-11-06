@@ -1,4 +1,4 @@
-# MKpower
+# <img src="https://github.com/stamats/MKpower/raw/master/hex-MKpower.png" alt="MKpower" width="120"/> &emsp; MKpower
 The repository includes the development version of R package MKpower
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
