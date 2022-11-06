@@ -35,7 +35,7 @@ ssize.propCI(prop, width, conf.level = 0.95,  method = "wald-cc")
   Wiley Series in Probability and Statistics.
   
   W.W. Piegorsch (2004). Sample sizes for improved binomial confidence intervals. 
-  \emph{Computational Statistics \& Data Analysis}, \bold{46}, 309-316.
+  \emph{Computational Statistics & Data Analysis}, \bold{46}, 309-316.
   
   M. Thulin (2014). The cost of using exact confidence intervals for a binomial 
   proportion. \emph{Electronic Journal of Statistics}, \bold{8}(1), 817-840.
