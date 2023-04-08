@@ -33,7 +33,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       data.x <- matrix(rx(ns[i]*iter), nrow = iter)
       data.y <- matrix(ry(ns[i]*iter), nrow = iter)
       res <- row_wilcoxon_twosample(data.x, data.y, 
-                                    alternative = alternative, mu = mu,
+                                    alternative = alternative, null = mu,
                                     exact = NA, correct = TRUE)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
@@ -45,7 +45,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
     empPower <- numeric(length(ns))
     for(i in seq_len(length(ns))){
       data.x <- matrix(rx(ns[i]*iter), nrow = iter)
-      res <- row_wilcoxon_onesample(data.x, alternative = alternative, mu = mu,
+      res <- row_wilcoxon_onesample(data.x, alternative = alternative, null = mu,
                                     exact = NA, correct = TRUE)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
@@ -58,7 +58,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
     for(i in seq_len(length(ns))){
       data.xy <- matrix(rx(ns[i]*iter), nrow = iter)
       res <- row_wilcoxon_onesample(data.xy, 
-                                    alternative = alternative, mu = mu,
+                                    alternative = alternative, null = mu,
                                     exact = NA, correct = TRUE)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break

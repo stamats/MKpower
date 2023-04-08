@@ -26,24 +26,24 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   }
   ## classical 2-sample t-test
   res <- row_t_equalvar(data.x, data.y, 
-                        alternative = alternative, mu = mu, 
+                        alternative = alternative, null = mu, 
                         conf.level = conf.level)
   if(!is.null(rx.H0) & !is.null(ry.H0)){
     res.H0 <- row_t_equalvar(data.x.H0, data.y.H0, 
                              alternative = alternative, 
-                             mu = mu, conf.level = conf.level)
+                             null = mu, conf.level = conf.level)
     CLASSICAL <- list("H1" = res, "H0" = res.H0)
   }else{
     CLASSICAL <- list("H1" = res)  
   }
   ## Welch t-test
   res <- row_t_welch(data.x, data.y, 
-                     alternative = alternative, mu = mu, 
+                     alternative = alternative, null = mu, 
                      conf.level = conf.level)
   if(!is.null(rx.H0) & !is.null(ry.H0)){
     res.H0 <- row_t_welch(data.x.H0, data.y.H0, 
                           alternative = alternative, 
-                          mu = mu, conf.level = conf.level)
+                          null = mu, conf.level = conf.level)
     WELCH <- list("H1" = res, "H0" = res.H0)
   }else{
     WELCH <- list("H1" = res)

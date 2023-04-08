@@ -58,7 +58,7 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
       res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
                                 conf.level, "exact", conf.int = FALSE)))
     }else{
-      res <- row_wilcoxon_twosample(data.x, data.y, alternative, mu = 0, 
+      res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
                                     exact = TRUE)
     }
   }
@@ -73,7 +73,7 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                                      conf.level, "exact", conf.int = FALSE)))
       }else{
         res.H0 <- row_wilcoxon_twosample(data.x.H0, data.y.H0, alternative, 
-                                         mu = 0, exact = TRUE)
+                                         null = 0, exact = TRUE)
       }
       
     }
@@ -86,7 +86,7 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
     res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
                               conf.level, "asymptotic")))
   }else{
-    res <- row_wilcoxon_twosample(data.x, data.y, alternative, mu = 0, 
+    res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
                                   exact = FALSE)
   }
   if(!is.null(rx.H0) & !is.null(ry.H0)){
@@ -95,7 +95,7 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                                    conf.level, "asymptotic")))
     }else{
       res.H0 <- row_wilcoxon_twosample(data.x.H0, data.y.H0, alternative, 
-                                       mu = 0, exact = FALSE)
+                                       null = 0, exact = FALSE)
     }
     ASYMPTOTIC <- list("H1" = res, "H0" = res.H0)
   }else{
