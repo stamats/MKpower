@@ -9,6 +9,7 @@
 - changed package link to https://github.com/stamats/MKpower
 - changed http to https
 - added argument conf.int to sim.power.t.test to reduce computation time
+- changed ..density.. to after_stat(density) in geom_hist
 
 
 ###########################################################
