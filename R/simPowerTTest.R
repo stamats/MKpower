@@ -1,5 +1,5 @@
 sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
-                             sig.level = 0.05, mu = 0, 
+                             sig.level = 0.05, conf.int = FALSE, mu = 0, 
                              alternative = c("two.sided", "less", "greater"), 
                              iter = 10000){
   alternative <- match.arg(alternative)
@@ -16,8 +16,12 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   stopifnot(is.numeric(iter), length(iter) == 1, iter >= 1)
   iter <- trunc(iter)
   
-  conf.level <- 1 - sig.level
-  alpha <- sig.level
+  if(conf.int){
+    conf.level <- 1 - sig.level
+    alpha <- sig.level
+  }else{
+    conf.level <- NA
+  }
   data.x <- matrix(rx(nx*iter), nrow = iter)
   data.y <- matrix(ry(ny*iter), nrow = iter)
   if(!is.null(rx.H0) & !is.null(ry.H0)){
@@ -53,32 +57,44 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   res$df <- df
   if(alternative == "less"){
     res$pvalue <- pt(res$statistic, df = df)
-    res$conf.high <- mu + (res$statistic + qt(conf.level, df = df))*res$stderr
+    if(conf.int){
+      res$conf.high <- mu + (res$statistic + qt(conf.level, df = df))*res$stderr
+    }
   }else if(alternative == "greater") {
     res$pvalue <- pt(res$statistic, df = df, lower.tail = FALSE)
-    res$conf.low <- mu + (res$statistic - qt(conf.level, df = df))*res$stderr
+    if(conf.int){
+      res$conf.low <- mu + (res$statistic - qt(conf.level, df = df))*res$stderr
+    }
   }
   else{
     res$pvalue <- 2 * pt(-abs(res$statistic), df = df)
-    crit <- qt(1 - alpha/2, df)
-    cint <- mu + (res$statistic + c(-crit, crit))*res$stderr
-    res$conf.low <- cint[1]
-    res$conf.high <- cint[2]
+    if(conf.int){
+      crit <- qt(1 - alpha/2, df)
+      cint <- mu + (res$statistic + c(-crit, crit))*res$stderr
+      res$conf.low <- cint[1]
+      res$conf.high <- cint[2]
+    }
   }
   if(!is.null(rx.H0) & !is.null(ry.H0)){
     if(alternative == "less"){
       res.H0$pvalue <- pt(res.H0$statistic, df = df)
-      res.H0$conf.high <- mu + (res.H0$statistic + qt(conf.level, df = df))*res.H0$stderr
+      if(conf.int){
+        res.H0$conf.high <- mu + (res.H0$statistic + qt(conf.level, df = df))*res.H0$stderr
+      }
     }else if(alternative == "greater") {
       res.H0$pvalue <- pt(res.H0$statistic, df = df, lower.tail = FALSE)
-      res.H0$conf.low <- mu + (res.H0$statistic - qt(conf.level, df = df))*res.H0$stderr
+      if(conf.int){
+        res.H0$conf.low <- mu + (res.H0$statistic - qt(conf.level, df = df))*res.H0$stderr
+      }
     }
     else{
       res.H0$pvalue <- 2 * pt(-abs(res.H0$statistic), df = df)
-      crit <- qt(1 - alpha/2, df)
-      cint <- mu + (res.H0$statistic + c(-crit, crit))*res.H0$stderr
-      res.H0$conf.low <- cint[1]
-      res.H0$conf.high <- cint[2]
+      if(conf.int){
+        crit <- qt(1 - alpha/2, df)
+        cint <- mu + (res.H0$statistic + c(-crit, crit))*res.H0$stderr
+        res.H0$conf.low <- cint[1]
+        res.H0$conf.high <- cint[2]
+      }
     }
     HSU <- list("H1" = res, "H0" = res.H0)
   }else{

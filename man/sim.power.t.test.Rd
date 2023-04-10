@@ -7,7 +7,7 @@
 }
 \usage{
 sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
-                 sig.level = 0.05, mu = 0, 
+                 sig.level = 0.05, conf.int = FALSE, mu = 0, 
                  alternative = c("two.sided", "less", "greater"), 
                  iter = 10000)
 }
@@ -19,6 +19,8 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
  \item{ry}{ function to simulate the values of second group (assuming H1).}
  \item{ry.H0}{ \code{NULL} or function to simulate the values of second group (assuming H0).}
  \item{sig.level}{ significance level (type I error probability)}
+ \item{conf.int}{ logical, shall confidence intervals be computed. 
+ Increases computation time!}
  \item{mu}{ true value of the location shift for the null hypothesis.}
  \item{alternative}{one- or two-sided test.  Can be abbreviated.}
  \item{iter}{ single integer, number of interations of the simulations.}
