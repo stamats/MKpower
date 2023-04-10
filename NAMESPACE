@@ -2,7 +2,7 @@ import("stats")
 importFrom("ggplot2", "ggplot", "aes_string", "geom_histogram", 
                       "geom_hline", "facet_grid", "labs", "geom_hex", 
                       "geom_line", "geom_text", "geom_vline", "xlab", 
-                      "ylab", "geom_point")
+                      "ylab", "geom_point", "after_stat")
 importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample",
                           "row_t_equalvar", "row_t_welch")
 importFrom("MKdescr", "scale_y_neglog10")

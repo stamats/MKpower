@@ -36,7 +36,7 @@ hist.sim.power.ttest <- function(x, color.hline = "orange", ...){
                           hypothesis = c(rep("H1", 3), rep("H0", 3)),
                           label = Lab)
     gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = after_stat(density)), binwidth = 0.01) + 
+      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
       geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
                 vjust = 2, inherit.aes = FALSE) +
@@ -52,7 +52,7 @@ hist.sim.power.ttest <- function(x, color.hline = "orange", ...){
                           hypothesis = rep("H1", 3),
                           label = Lab)
     gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = after_stat(density)), binwidth = 0.01) + 
+      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
       geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
                 vjust = 2, inherit.aes = FALSE) +
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
@@ -134,7 +134,7 @@ hist.sim.power.wtest <- function(x, color.hline = "orange", ...){
                             label = Lab)
     }
     gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = after_stat(density)), binwidth = 0.01) + 
+      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
       geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
                 vjust = 2, inherit.aes = FALSE) +
@@ -160,7 +160,7 @@ hist.sim.power.wtest <- function(x, color.hline = "orange", ...){
                             label = Lab)
     }
     gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = after_stat(density)), binwidth = 0.01) + 
+      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
       geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
                 vjust = 2, inherit.aes = FALSE) +
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
