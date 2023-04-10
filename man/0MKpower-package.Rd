@@ -22,13 +22,13 @@ comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5
 \tabular{ll}{
 Package: \tab MKpower\cr
 Type: \tab Package\cr
-Version: \tab 0.5\cr
-Date: \tab 2020-11-27\cr
+Version: \tab 0.6\cr
+Date: \tab 2023-04-11\cr
 Depends: \tab R(>= 3.5.0)\cr
-Imports: \tab stats, matrixTests, ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
+Imports: \tab stats, matrixTests(>= 0.2), ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr
 License: \tab LGPL-3\cr
-URL: \tab http://www.stamats.de/\cr
+URL: \tab https://github.com/stamats/MKpower\cr
 }
 library(MKpower)
 }
