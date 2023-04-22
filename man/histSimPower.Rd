@@ -2,10 +2,8 @@
 \alias{hist}
 \alias{hist.sim.power.ttest}
 \alias{hist.sim.power.wtest}
-\title{ Histograms }
-\description{
-  Produce histograms for simulations of power and type-I-error of tests. 
-}
+\title{Histograms}
+\description{Produce histograms for simulations of power and type-I-error of tests.}
 \usage{
 \S3method{hist}{sim.power.ttest}(x, color.hline = "orange", \dots)
 
