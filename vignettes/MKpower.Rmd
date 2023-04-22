@@ -102,8 +102,8 @@ of 45 is required to achieve a power of at least 80%. The calculated power is
 82.2%. With a sample size of 57 the power will be at least 90%, where the
 calculated power is 91.2%.
 
-Introducing additional covariates (random covariate model), the required 
-sample size increases.
+Introducing additional covariates (random covariate model) will increase the required 
+sample size.
 ```{r}
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8,
              nr.covs = 2)
@@ -114,6 +114,20 @@ power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8,
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8,
              nr.covs = 10)
 ```
+
+We can also calculate the sample size for an imbalanced design.
+```{r}
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(n = c(13, 16, 19), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 0.8, 2/3))
+power.ancova(n = c(17, 14, 12), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 0.8, 2/3))
+```
+
+We get a smaller total sample size with an imbalanced design.
 
 
 ## Wilcoxon Rank Sum and Signed Rank Tests

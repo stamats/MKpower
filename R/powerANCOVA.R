@@ -8,10 +8,6 @@ power.ancova <- function(n = NULL, mu = NULL, var = 1, nr.covs = 1L,
   if(is.null(n) && is.null(power)){
     stop("Either 'n' or 'power' must be non NULL.")
   }
-  if(!is.null(n) && (!is.numeric(n) || length(n) != 1L || any(n <= 0))){
-    stop("'n' must be a positive (integer) number.")
-  }
-  if(!is.null(n) && !is.integer(n)) n <- as.integer(n)
   if(!is.numeric(var) || length(var) != 1L || any(var <= 0)){
     stop("The standard error of the residuals 'var' must be a positive (real) number.")
   }
@@ -21,6 +17,10 @@ power.ancova <- function(n = NULL, mu = NULL, var = 1, nr.covs = 1L,
   if(!is.integer(nr.covs)) nr.covs <- as.integer(nr.covs)
   stopifnot(is.numeric(mu))
   nr.groups <- length(mu)
+  if(!is.null(n) && (!is.numeric(n) || length(n) != nr.groups || any(n <= 0))){
+    stop("'n' must be a positive (integer) number.")
+  }
+  if(!is.null(n) && !is.integer(n)) n <- as.integer(n)
   if(is.null(group.ratio)){ 
     ## balanced design
     group.ratio <- rep(1, nr.groups)
@@ -78,20 +78,20 @@ power.ancova <- function(n = NULL, mu = NULL, var = 1, nr.covs = 1L,
   }
   if(is.null(n)){
     N.start <- 2*nr.groups - 1
-    n <- uniroot(f = emp.power.fun, lower = N.start, upper = n.max, 
+    N1 <- uniroot(f = emp.power.fun, lower = N.start, upper = n.max, 
                  tol=10*rel.tol, nr.groups = nr.groups, group.ratio = group.ratio,
                  nr.covs = nr.covs, sig.level = sig.level, df1 = df1,
                  gamma.sq = gamma.sq, rel.tol = rel.tol, power = power)$root
-    Ns <- n*group.ratio
+    Ns <- N1*group.ratio
     NOTE <- paste("Total sample size:", sum(ceiling(Ns)))
   }
   if(is.null(power)){
-    N1 <- n/sum(group.ratio)
+    N1 <- n[1]
+    Ns <- n
     power <- emp.power.fun(n = N1, nr.groups = nr.groups, group.ratio = group.ratio,
                            nr.covs = nr.covs, sig.level = sig.level, df1 = df1,
                            gamma.sq = gamma.sq, rel.tol = rel.tol)
-    Ns <- N1*group.ratio
-    NOTE <- paste("Total sample size:", sum(ceiling(Ns)))
+    NOTE <- paste("Total sample size:", sum(n))
   }
   
   METHOD <- "ANCOVA power calculation"

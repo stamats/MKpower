@@ -10,7 +10,7 @@ power.ancova(n = NULL, mu = NULL, var = 1, nr.covs = 1L, group.ratio = NULL,
              rel.tol = .Machine$double.eps^0.25)
 }
 \arguments{
- \item{n}{total sample size (sum of all groups).}
+ \item{n}{vector of sample sizes per groups.}
  \item{mu}{vector of mean values of the groups.}
  \item{var}{error variance.}
  \item{nr.covs}{number of covariates (larger or equal than 1).}
@@ -62,9 +62,9 @@ cbind(rep(1,3), -diag(3))
 
 ## Table 1 in Shieh (2020)
 power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8)
-power.ancova(n = 63, mu=c(400, 450, 500), var = 9900)
+power.ancova(n = rep(63/3, 3), mu=c(400, 450, 500), var = 9900)
 power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8, nr.covs = 10)
-power.ancova(n = 72, mu=c(400, 450, 500), var = 9900, nr.covs = 10)
+power.ancova(n = rep(72/3, 3), mu=c(400, 450, 500), var = 9900, nr.covs = 10)
 
 ## Table 2 in Shieh (2020)
 power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8)
