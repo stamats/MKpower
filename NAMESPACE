@@ -9,7 +9,8 @@ importFrom("MKdescr", "scale_y_neglog10")
 importFrom("MKinfer", "volcano")
 importFrom("qqplotr", "stat_qq_point", "stat_qq_line", "stat_qq_band")
 importFrom("coin", "wilcox_test", "pvalue", "statistic", "confint")
-export(power.diagnostic.test,
+export(power.ancova,
+       power.diagnostic.test,
        power.hsu.t.test,
        power.nb.test,
        power.prop1.test,
