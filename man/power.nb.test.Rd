@@ -1,6 +1,6 @@
 \name{power.nb.test}
 \alias{power.nb.test}
-\title{Power calculation for comparing two negative binomial rates}
+\title{Power Calculation for Comparing Two Negative Binomial Rates}
 \description{
  Compute sample size or power for comparing two negative binomial rates.
 }
