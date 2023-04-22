@@ -68,15 +68,15 @@ power.ancova(n = rep(72/3, 3), mu=c(400, 450, 500), var = 9900, nr.covs = 10)
 
 ## Table 2 in Shieh (2020)
 power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8)
-power.ancova(n = 48, mu=c(400, 450, 500), var = 7500)
+power.ancova(n = rep(48/3, 3), mu=c(400, 450, 500), var = 7500)
 power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8, nr.covs = 10)
-power.ancova(n = 60, mu=c(400, 450, 500), var = 7500, nr.covs = 10)
+power.ancova(n = rep(60/3, 3), mu=c(400, 450, 500), var = 7500, nr.covs = 10)
 
 ## Table 3 in Shieh (2020)
 power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8)
-power.ancova(n = 18, mu=c(400, 450, 500), var = 1900)
+power.ancova(n = rep(18/3, 3), mu=c(400, 450, 500), var = 1900)
 power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8, nr.covs = 10)
-power.ancova(n = 27, mu=c(400, 450, 500), var = 1900, nr.covs = 10)
+power.ancova(n = rep(27/3, 3), mu=c(400, 450, 500), var = 1900, nr.covs = 10)
 
 ## ANOVA approach for Table 1-3
 power.anova.test(groups = 3, between.var = var(c(400, 450, 500)), 
@@ -86,21 +86,21 @@ power.anova.test(n = 63/3, groups = 3, between.var = var(c(400, 450, 500)),
 
 ## Table 4 in Shieh (2020)
 power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8)
-power.ancova(n = 96, mu=c(410, 450, 490), var = 9900)
+power.ancova(n = rep(96/3, 3), mu=c(410, 450, 490), var = 9900)
 power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8, nr.covs = 10)
-power.ancova(n = 105, mu=c(410, 450, 490), var = 9900, nr.covs = 10)
+power.ancova(n = rep(105/3, 3), mu=c(410, 450, 490), var = 9900, nr.covs = 10)
 
 ## Table 5 in Shieh (2020)
 power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8)
-power.ancova(n = 72, mu=c(410, 450, 490), var = 7500)
+power.ancova(n = rep(72/3, 3), mu=c(410, 450, 490), var = 7500)
 power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8, nr.covs = 10)
-power.ancova(n = 84, mu=c(410, 450, 490), var = 7500, nr.covs = 10)
+power.ancova(n = rep(84/3, 3), mu=c(410, 450, 490), var = 7500, nr.covs = 10)
 
 ## Table 6 in Shieh (2020)
 power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8)
-power.ancova(n = 24, mu=c(410, 450, 490), var = 1900)
+power.ancova(n = rep(24/3, 3), mu=c(410, 450, 490), var = 1900)
 power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8, nr.covs = 10)
-power.ancova(n = 33, mu=c(410, 450, 490), var = 1900, nr.covs = 10)
+power.ancova(n = rep(33/3, 3), mu=c(410, 450, 490), var = 1900, nr.covs = 10)
 
 ## ANOVA approach for Table 4-6
 power.anova.test(groups = 3, between.var = var(c(410, 450, 490)), 
@@ -112,7 +112,7 @@ power.anova.test(n = 96/3, groups = 3, between.var = var(c(410, 450, 490)),
 ## Example from Maxwell and Delaney (2004) according to Shieh (2020)
 ###############################################################################
 ## ANCOVA (balanced design)
-power.ancova(n = 30, mu=c(7.5366, 11.9849, 13.9785), var = 29.0898)
+power.ancova(n = rep(30/3, 3), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898)
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8)
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.9)
 
