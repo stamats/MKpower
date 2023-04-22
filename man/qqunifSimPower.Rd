@@ -3,7 +3,7 @@
 \alias{qqunif.default}
 \alias{qqunif.sim.power.ttest}
 \alias{qqunif.sim.power.wtest}
-\title{ qq - Plots for Uniform Distribution}
+\title{ qq-Plots for Uniform Distribution}
 \description{
   Produce qq-plot(s) of the given effect size and p values assuming a uniform distribution. 
 }
