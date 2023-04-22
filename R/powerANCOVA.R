@@ -1,4 +1,4 @@
-power.ancova <- function(n = NULL, mu = NULL, sd = 1, nr.covs = 1L, 
+power.ancova <- function(n = NULL, mu = NULL, var = 1, nr.covs = 1L, 
                          group.ratio = NULL, contr.mat = NULL, 
                          sig.level = 0.05, power = NULL, n.max = 1000L,
                          rel.tol = .Machine$double.eps^0.25){
@@ -12,8 +12,8 @@ power.ancova <- function(n = NULL, mu = NULL, sd = 1, nr.covs = 1L,
     stop("'n' must be a positive (integer) number.")
   }
   if(!is.null(n) && !is.integer(n)) n <- as.integer(n)
-  if(!is.numeric(sd) || length(sd) != 1L || any(sd <= 0)){
-    stop("The standard error of the residuals 'sd' must be a positive (real) number.")
+  if(!is.numeric(var) || length(var) != 1L || any(var <= 0)){
+    stop("The standard error of the residuals 'var' must be a positive (real) number.")
   }
   if(!is.numeric(nr.covs) || length(nr.covs) != 1L || any(nr.covs <= 0)){
     stop("'nr.covs' must be a positive (integer) number.")
@@ -47,7 +47,7 @@ power.ancova <- function(n = NULL, mu = NULL, sd = 1, nr.covs = 1L,
   Cmat <- contr.mat %*% matrix(mu, nrow = nr.groups)
   df1 <- nrow(contr.mat)
   Qmat <- diag(sum(group.ratio)/group.ratio)
-  gamma.sq <- as.vector(t(Cmat) %*% solve(contr.mat %*% Qmat %*% t(contr.mat)) %*% Cmat/sd^2)
+  gamma.sq <- as.vector(t(Cmat) %*% solve(contr.mat %*% Qmat %*% t(contr.mat)) %*% Cmat/var)
   emp.power.fun <- function(n, nr.groups, group.ratio, nr.covs, sig.level, df1, 
                             gamma.sq, rel.tol, power = NULL){
     NT <- sum(n*group.ratio)
@@ -95,7 +95,7 @@ power.ancova <- function(n = NULL, mu = NULL, sd = 1, nr.covs = 1L,
   }
   
   METHOD <- "ANCOVA power calculation"
-  structure(list(ns = Ns, mu = mu, sd = sd, nr.covs = nr.covs, 
+  structure(list(ns = Ns, mu = mu, var = var, nr.covs = nr.covs, 
                  sig.level = sig.level, power = power, note = NOTE, method = METHOD), 
             class = "power.htest")
 }
