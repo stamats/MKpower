@@ -7,7 +7,7 @@ output:
     toc: true
 bibliography: MKpower.bib
 vignette: >
-  %\VignetteIndexEntry{MKpower}
+  %\VignetteIndexEntry{Package MKpower}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{utf8}
 ---
