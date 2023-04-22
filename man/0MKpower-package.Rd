@@ -15,15 +15,16 @@ of a diagnostic test(-system) (Flahault et al. (2005),
 <doi:10.1016/j.jclinepi.2004.12.009>; Dobbin and Simon (2007), 
 <doi:10.1093/biostatistics/kxj036>) as well as for a single proportion 
 (Fleiss et al. (2003), ISBN:978-0-471-52629-2; Piegorsch (2004), 
-<doi:10.1016/j.csda.2003.10.002>; Thulin (2014), <doi:10.1214/14-ejs909>) and 
-comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5947>).
+<doi:10.1016/j.csda.2003.10.002>; Thulin (2014), <doi:10.1214/14-ejs909>),  
+comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5947>),
+and ANCOVA (Shieh (2020), <doi:10.1007/s11336-019-09692-3>).
 }
 \details{
 \tabular{ll}{
 Package: \tab MKpower\cr
 Type: \tab Package\cr
-Version: \tab 0.6\cr
-Date: \tab 2023-04-10\cr
+Version: \tab 0.7\cr
+Date: \tab 2023-04-22\cr
 Depends: \tab R(>= 3.5.0)\cr
 Imports: \tab stats, matrixTests(>= 0.2), ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr
