@@ -1,6 +1,6 @@
 \name{power.hsu.t.test}
 \alias{power.hsu.t.test}
-\title{Power calculations for two sample Hsu t test}
+\title{Power Calculations for Two-sample Hsu t Test}
 \usage{
 power.hsu.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
                    power = NULL, alternative = c("two.sided", "one.sided"),

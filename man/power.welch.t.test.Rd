@@ -1,6 +1,6 @@
 \name{power.welch.t.test}
 \alias{power.welch.t.test}
-\title{Power calculations for two sample Welch t test}
+\title{Power Calculations for Two-sample Welch t Test}
 \usage{
 power.welch.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
                    power = NULL, alternative = c("two.sided", "one.sided"),

@@ -1,6 +1,6 @@
 \name{power.diagnostic.test}
 \alias{power.diagnostic.test}
-\title{Power calculations for a diagnostic test}
+\title{Power Calculations for Diagnostic Tests}
 \description{
  Compute sample size, power, delta, or significance level of a diagnostic test
  for an expected sensititivy or specificity.
