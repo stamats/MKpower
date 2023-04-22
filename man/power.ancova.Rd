@@ -111,7 +111,7 @@ power.anova.test(n = 96/3, groups = 3, between.var = var(c(410, 450, 490)),
 ###############################################################################
 ## Example from Maxwell and Delaney (2004) according to Shieh (2020)
 ###############################################################################
-## ANCOVA
+## ANCOVA (balanced design)
 power.ancova(n = 30, mu=c(7.5366, 11.9849, 13.9785), var = 29.0898)
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8)
 power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.9)
@@ -123,6 +123,16 @@ power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)),
                  within.var = 29.0898, power = 0.8)
 power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
                  within.var = 29.0898, power = 0.9)
+                 
+## ANCOVA - imbalanced design
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(n = c(13, 16, 19), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 0.8, 2/3))
+power.ancova(n = c(17, 14, 12), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 0.8, 2/3))
 }
 \keyword{htest}
 
