@@ -16,7 +16,7 @@ power.nb.test(n = NULL, mu0, mu1, RR, duration = 1, theta, ssize.ratio = 1,
  \item{RR}{ratio of expected event rates: mu1/mu0}
  \item{duration}{(average) treatment duration}
  \item{theta}{theta parameter of negative binomial distribution; see \code{\link[MASS]{rnegbin}}}
- \item{ssize.ratio}{ratio of sample sizes: n/n1 where n1 is sample size of group 1}
+ \item{ssize.ratio}{ratio of sample sizes: n1/n where n1 is sample size of group 1}
  \item{sig.level}{Significance level (Type I error probability)}
  \item{power}{Power of test (1 minus Type II error probability)}
  \item{alternative}{one- or two-sided test}

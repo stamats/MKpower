@@ -23,8 +23,8 @@ and ANCOVA (Shieh (2020), <doi:10.1007/s11336-019-09692-3>).
 \tabular{ll}{
 Package: \tab MKpower\cr
 Type: \tab Package\cr
-Version: \tab 0.7\cr
-Date: \tab 2023-04-22\cr
+Version: \tab 0.8\cr
+Date: \tab 2023-08-18\cr
 Depends: \tab R(>= 3.5.0)\cr
 Imports: \tab stats, matrixTests(>= 0.2), ggplot2, MKdescr, MKinfer(>= 0.4), qqplotr, coin\cr
 Suggests: \tab knitr, rmarkdown\cr
