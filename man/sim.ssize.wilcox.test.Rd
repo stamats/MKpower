@@ -6,7 +6,7 @@ sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
                       type = c("two.sample", "one.sample", "paired"), 
                       alternative = c("two.sided", "less", "greater"),
                       n.min = 10, n.max = 200, step.size = 10, 
-                      iter = 10000, BREAK = TRUE)
+                      iter = 10000, BREAK = TRUE, exact = NA, correct = TRUE)
 }
 \arguments{
  \item{rx}{ function to simulate the values of x, respectively x-y in the paired case.}
@@ -22,6 +22,13 @@ sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
  \item{iter}{ integer, number of interations of the simulations.}
  \item{BREAK}{ logical, grid search stops when the emperical power is larger
  than the requested power.}
+ \item{exact}{ logical or NA (default) indicator whether an exact p-value should 
+ be computed (see Details at \code{\link[matrixTests]{wilcoxon}}). A single 
+ value or a logical vector with values for each observation.}
+ \item{correct}{ogical indicator whether continuity correction should be applied 
+ in the cases where p-values are obtained using normal approximation. A single 
+ value or logical vector with values for each observation; see 
+ \code{\link[matrixTests]{wilcoxon}}.}
 }
 \description{
   Simulate the empirical power of Wilcoxon rank sum and signed rank tests for
@@ -30,8 +37,9 @@ sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
 
 \details{
   Functions \code{rx} and \code{ry} are used to simulate the data and 
-  functions \code{row_wilcoxon_twosample} and \code{row_wilcoxon_onesample}
-  are used to efficiently compute the p values of the respective test.
+  functions \code{row_wilcoxon_twosample} and \code{row_wilcoxon_onesample} of 
+  package \pkg{matrixTests} are used to efficiently compute the p values of the 
+  respective test.
   
   We recommend a two steps procedure: In the first step, start with a wide grid 
   and find out in which range of sample size values the intended power will

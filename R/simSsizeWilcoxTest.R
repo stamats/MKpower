@@ -2,7 +2,8 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
                                   type = c("two.sample", "one.sample", "paired"), 
                                   alternative = c("two.sided", "less", "greater"),
                                   n.min = 10, n.max = 200, step.size = 10, 
-                                  iter = 10000, BREAK = TRUE){
+                                  iter = 10000, BREAK = TRUE, exact = NA, 
+                                  correct = TRUE){
   type <- match.arg(type)
   alternative <- match.arg(alternative)
   if(length(sig.level) != 1)
@@ -34,7 +35,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       data.y <- matrix(ry(ns[i]*iter), nrow = iter)
       res <- row_wilcoxon_twosample(data.x, data.y, 
                                     alternative = alternative, null = mu,
-                                    exact = NA, correct = TRUE)[,"pvalue"]
+                                    exact = exact, correct = correct)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
     }
@@ -46,7 +47,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
     for(i in seq_len(length(ns))){
       data.x <- matrix(rx(ns[i]*iter), nrow = iter)
       res <- row_wilcoxon_onesample(data.x, alternative = alternative, null = mu,
-                                    exact = NA, correct = TRUE)[,"pvalue"]
+                                    exact = exact, correct = correct)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
     }
@@ -59,7 +60,7 @@ sim.ssize.wilcox.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       data.xy <- matrix(rx(ns[i]*iter), nrow = iter)
       res <- row_wilcoxon_onesample(data.xy, 
                                     alternative = alternative, null = mu,
-                                    exact = NA, correct = TRUE)[,"pvalue"]
+                                    exact = exact, correct = correct)[,"pvalue"]
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
     }

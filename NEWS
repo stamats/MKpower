@@ -6,6 +6,7 @@
 ## Version 0.8
 ###########################################################
 - corrected bug in documentation of power.nb.test detected by Evan Marie Lowder.
+- extended arguments of function sim.ssize.wilcox.test
 
 
 ###########################################################
