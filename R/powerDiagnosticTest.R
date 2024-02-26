@@ -94,7 +94,7 @@ power.diagnostic.test <- function(sens = NULL, spec = NULL,
             class = "power.htest")  
   }else{
     NOTE <- "n is number of controls, n1 is number of cases"
-    res <- structure(list(sens = sens, n = n, n1 = n1, delta = delta, 
+    res <- structure(list(spec = spec, n = n, n1 = n1, delta = delta, 
                           sig.level = sig.level, power = power, prev = prev, 
                           note = NOTE, method = METHOD), 
                      class = "power.htest")

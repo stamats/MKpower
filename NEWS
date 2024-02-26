@@ -7,6 +7,9 @@
 ###########################################################
 - corrected bug in documentation of power.nb.test detected by Evan Marie Lowder.
 - extended arguments of function sim.ssize.wilcox.test
+- corrected minor bug in return value for power.diagnostic.test if spec is 
+  given
+- removed DESCRIPTION table from package Rd-file.
 
 
 ###########################################################
