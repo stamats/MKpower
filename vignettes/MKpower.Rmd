@@ -20,8 +20,8 @@ of empirical power and type-I-error. In addition, power and sample size calculat
 for Wilcoxon rank sum and signed rank tests via Monte-Carlo simulations can 
 be performed. Moreover, power and sample size required for the evaluation of a 
 diagnostic test(-system) [@Flahault2005; @Dobbin2007] as well as for a single 
-proportion [@Fleiss2003], comparing two negative binomial rates [@Zhu2014],
-and ANCOVA [@Shieh2020] can be calculated.
+proportion [@Fleiss2003], comparing two negative binomial rates [@Zhu2014], 
+ANCOVA [@Shieh2020], and reference ranges [@Jennen2005].
 
 We first load the package.
 ```{r}
