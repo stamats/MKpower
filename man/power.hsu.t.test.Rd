@@ -20,7 +20,7 @@ power.hsu.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
 }
 \description{
   Compute the power of the two-sample Hsu t test, or determine parameters
-  to obtain a target power; see Section 7.4.4 in Hedderich and Sachs (2016),
+  to obtain a target power; see Section 7.4.4 in Hedderich and Sachs (2016).
 }
 
 \details{
