@@ -20,6 +20,7 @@ export(power.ancova,
        sim.power.wilcox.test,
        ssize.pcc,
        ssize.propCI,
+       ssize.reference.range,
        qqunif,
        volcano)
 

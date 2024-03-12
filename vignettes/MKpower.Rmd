@@ -193,6 +193,30 @@ ssize.pcc(gamma = g, stdFC = fc, nrFeatures = 22000)
 ```
 
 
+## Reference Range
+We can apply function ssize.reference.range to determine the sample size required
+for a study planned to establish a reference range. The parametric approach 
+assumes a normal distribution whereas the non-parametric approach only assumes
+a continuous distribution.
+```{r}
+ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                      method = "parametric", exact = TRUE)
+ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                      method = "parametric", exact = FALSE)
+ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                      method = "nonparametric", exact = TRUE)
+ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                      method = "nonparametric", exact = FALSE)
+```
+
+We can also calculate the sample size for one-sided reference ranges.
+```{r}
+ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
+                      method = "parametric", exact = TRUE, 
+                      alternative = "one.sided")
+```
+
+
 ## Power and Type-I-Error Simulations
 There are quite some discussions and various proposals, which test is the best 
 under which circumstances when we want to compare the location (mean, median) 

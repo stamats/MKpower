@@ -10,6 +10,7 @@
 - corrected minor bug in return value for power.diagnostic.test if spec is 
   given
 - removed DESCRIPTION table from package Rd-file.
+- added sample size calculation for reference ranges.
 
 
 ###########################################################
