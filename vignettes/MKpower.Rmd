@@ -21,7 +21,8 @@ for Wilcoxon rank sum and signed rank tests via Monte-Carlo simulations can
 be performed. Moreover, power and sample size required for the evaluation of a 
 diagnostic test(-system) [@Flahault2005; @Dobbin2007] as well as for a single 
 proportion [@Fleiss2003], comparing two negative binomial rates [@Zhu2014], 
-ANCOVA [@Shieh2020], and reference ranges [@Jennen2005].
+ANCOVA [@Shieh2020], reference ranges [@Jennen2005], and multiple primary 
+endpoints [@Sozu2015].
 
 We first load the package.
 ```{r}
@@ -214,6 +215,65 @@ We can also calculate the sample size for one-sided reference ranges.
 ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
                       method = "parametric", exact = TRUE, 
                       alternative = "one.sided")
+```
+
+## Multiple Primary Endpoints (MPE)
+
+We demonstrate how to calculate the sample size for a trial with two co-primary 
+endpoints with known covariance.
+ 
+```{r}
+Sigma <- matrix(c(1, 0.8, 0.8, 1), nrow = 2)
+power.mpe.known.var(K = 2, delta = c(0.25, 0.4), Sigma = Sigma, 
+                    sig.level = 0.025, power = 0.8)
+## equivalent: specify SDs and correlation rho
+power.mpe.known.var(K = 2, delta = c(0.25, 0.4), SD = c(1,1), rho = 0.8, 
+                    sig.level = 0.025, power = 0.8)
+```
+
+Next, we show how to calculate the sample size for a trial with two 
+co-primary endpoints with unknown covariance. Here, we follow three steps to 
+determine the sample size.
+
++ Step 1: As we need starting values for our algorithm that computes the sample 
+size in this case, we first act as if the covariance would be known and compute 
+the sample size by applying our function `power.mpe.known.var`.
+
++ Step 2: The resulting value of `n` is considered as lower bound for the sample 
+size in case of unknown covariance and is used as `n.min` in function 
+`power.mpe.unkown.var`. Moreover, we specify a reasonable `n.max`, which must be 
+larger than `n.min`.
+
++ Step 3: Finally, by using the arguments from the step 2, we can compute the 
+sample size for the situation with unknown covariance.
+  
+
+```{r}
+## Step 1:
+power.mpe.known.var(K = 2, delta = c(0.5, 0.4), Sigma = Sigma, 
+                    sig.level = 0.025, power = 0.8)
+## Step 2 + 3:
+Sigma <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+power.mpe.unknown.var(K = 2, delta = c(0.5, 0.4), Sigma = Sigma, 
+                      sig.level = 0.025, power = 0.8, 
+                      n.min = 105, n.max = 120)
+## equivalent: specify SDs and correlation rho
+power.mpe.unknown.var(K = 2, delta = c(0.5, 0.4), SD = c(1,1), rho = 0.5, 
+                      sig.level = 0.025, power = 0.8, 
+                      n.min = 105, n.max = 120)
+```
+
+We finally demonstrate how to calculate the sample size for a trial with two primary 
+endpoints with known covariance, where the trial is designed to find a significant 
+difference for at least one endpoint.
+
+```{r}
+Sigma <- matrix(c(1, 0.3, 0.3, 1), nrow = 2)
+power.mpe.atleast.one(K = 2, delta = c(0.2, 0.3), Sigma = Sigma,
+                      power = 0.8, sig.level = 0.025)
+## equivalent: specify SDs and correlation rho
+power.mpe.atleast.one(K = 2, delta = c(0.2, 0.3), SD = c(1,1), rho = 0.3,  
+                      power = 0.8, sig.level = 0.025)
 ```
 
 

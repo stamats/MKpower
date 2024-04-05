@@ -17,8 +17,9 @@ of a diagnostic test(-system) (Flahault et al. (2005),
 (Fleiss et al. (2003), ISBN:978-0-471-52629-2; Piegorsch (2004), 
 <doi:10.1016/j.csda.2003.10.002>; Thulin (2014), <doi:10.1214/14-ejs909>),  
 comparing two negative binomial rates (Zhu and Lakkis (2014), <doi:10.1002/sim.5947>), 
-ANCOVA (Shieh (2020), <doi:10.1007/s11336-019-09692-3>) and reference 
-ranges (Jennen-Steinmetz and Wellek (2005), <doi:10.1002/sim.2177>).
+ANCOVA (Shieh (2020), <doi:10.1007/s11336-019-09692-3>), reference 
+ranges (Jennen-Steinmetz and Wellek (2005), <doi:10.1002/sim.2177>), and
+multiple primary endpoints (Sozu et al. (2015), ISBN:978-3-319-22005-5).
 }
 \details{
 library(MKpower)

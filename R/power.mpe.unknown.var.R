@@ -1,9 +1,7 @@
 power.mpe.unknown.var <- function(K, n = NULL, delta = NULL, Sigma, SD, rho, sig.level = 0.05,
                               power = NULL, M = 10000, n.min = NULL, n.max = NULL, 
-                              tol = .Machine$double.eps^0.25, use.uniroot = TRUE)
-  {
+                              tol = .Machine$double.eps^0.25, use.uniroot = TRUE){
   ## check of input
-
   if(missing(K))
     stop("specify the number of co-primary endpoints")
   if(!is.numeric(K))

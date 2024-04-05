@@ -1,0 +1,71 @@
+\name{power.mpe.atleast.one}
+\alias{power.mpe.atleast.one}
+\title{Power for at least One Endpoint with Known Covariance}
+\description{
+ The function calculates either sample size or power for continuous multiple
+ primary endpoints for at least one endpoint with known covariance.
+}
+\usage{power.mpe.atleast.one(K, n = NULL, delta = NULL, Sigma, SD, rho, sig.level = 0.05/K,
+                             power = NULL, n.max = 1e5, tol = .Machine$double.eps^0.25)
+}
+\arguments{
+  \item{K}{number of endpoints}
+  \item{n}{optional: sample size}
+  \item{delta}{expected effect size}
+  \item{Sigma}{A covariance of known matrix}
+  \item{SD}{known standard deviations (length \code{K})}
+  \item{rho}{known correlations (length \code{0.5*K*(K-1)})}
+  \item{sig.level}{Significance level (Type I error probability)}
+  \item{power}{optional: Power of test (1 minus Type II error probability)}
+  \item{n.max}{upper end of the interval to be search for \code{n} via \code{\link[stats]{uniroot}}.}
+  \item{tol}{The desired accuracy}
+}
+\details{
+  The function can be used to either compute sample size or power for continuous
+  multiple primary endpoints with known covariance where a significant difference 
+  for at least one endpoint is expected.
+  The implementation is based on the formulas given in the references below.
+
+  The null hypothesis reads \eqn{\mu_{Tk}-\mu_{Ck}\le 0}{mu_Tk-mu_Ck <= 0} for
+  all \eqn{k\in\{1,\ldots,K\}}{k in {1,...,K}} where Tk is treatment k,
+  Ck is control k and K is the number of co-primary endpoints.
+
+  One has to specify either \code{n} or \code{power}, the other parameter is
+  determined. Moreover, either covariance matrix \code{Sigma} or standard
+  deviations \code{SD} and correlations \code{rho} must be given.
+}
+\value{
+Object of class \code{power.mpe.test}, a list of arguments (including the
+computed one) augmented with method and note elements.
+}
+\references{
+  Sugimoto, T. and Sozu, T. and Hamasaki, T. (2012). A convenient formula for sample
+  size calculations in clinical trials with multiple co-primary continuous endpoints.
+  \emph{Pharmaceut. Statist.}, \bold{11}: 118-128. doi:10.1002/pst.505
+
+  Sozu, T. and Sugimoto, T. and Hamasaki, T. and Evans, S.R. (2015). \emph{Sample
+  Size Determination in Clinical Trials with Multiple Endpoints}. Springer Briefs in
+  Statistics, ISBN 978-3-319-22005-5.
+}
+\author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
+\note{The function appeared first in package \pkg{mpe}, which is now archived on CRAN.}
+\examples{
+## compute power
+power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(1,1)), power = 0.8)
+
+## compute sample size
+power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(2,2)), power = 0.9)
+
+## known covariance matrix
+Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+                  0.840, 1.960, 0.168, 1.568,
+                  1.296, 0.168, 1.440, 0.420,
+                  0.840, 1.568, 0.420, 1.960), ncol = 4)
+## compute power
+power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+## equivalent: known SDs and correlation rho
+power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75),
+                      SD = c(1.2, 1.4, 1.2, 1.4), 
+                      rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+}
+\keyword{multivariate}
