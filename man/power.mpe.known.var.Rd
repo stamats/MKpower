@@ -1,0 +1,74 @@
+\name{power.mpe.known.var}
+\alias{power.mpe.known.var}
+\title{Multiple Co-Primary Endpoints with Known Covariance}
+\description{
+ The function calculates either sample size or power for continuous multiple
+ co-primary endpoints with known covariance.
+}
+\usage{
+power.mpe.known.var(K, n = NULL, delta = NULL, Sigma, SD, rho,
+  sig.level = 0.05, power = NULL, n.max = 1e5, tol = .Machine$double.eps^0.25)
+}
+\arguments{
+  \item{K}{number of co-primary endpoints}
+  \item{n}{optional: sample size}
+  \item{delta}{expected effect size (length \code{K})}
+  \item{Sigma}{known covariance matrix (dimension \code{K} x \code{K})}
+  \item{SD}{known standard deviations (length \code{K})}
+  \item{rho}{known correlations (length \code{0.5*K*(K-1)})}
+  \item{sig.level}{significance level (Type I error probability)}
+  \item{power}{optional: power of test (1 minus Type II error probability)}
+  \item{n.max}{upper end of the interval to be search for \code{n} via \code{\link[stats]{uniroot}}.}
+  \item{tol}{the desired accuracy for \code{\link[stats]{uniroot}}.}
+}
+\details{
+  The function can be used to either compute sample size or power for continuous
+  multiple co-primary endpoints with known covariance where a multivariate
+  normal distribution is assumed. The implementation is based on the formulas
+  given in the references below.
+
+  The null hypothesis reads \eqn{\mu_{Tk}-\mu_{Ck}\le 0}{mu_Tk-mu_Ck <= 0} for
+  at least one \eqn{k\in\{1,\ldots,K\}}{k in {1,...,K}} where Tk is treatment k,
+  Ck is control k and K is the number of co-primary endpoints.
+
+  One has to specify either \code{n} or \code{power}, the other parameter is
+  determined. Moreover, either covariance matrix \code{Sigma} or standard
+  deviations \code{SD} and correlations \code{rho} must be given.
+}
+\value{
+Object of class \code{power.mpe.test}, a list of arguments (including the
+computed one) augemented with method and note elements.
+}
+\references{
+  Sugimoto, T. and Sozu, T. and Hamasaki, T. (2012). A convenient formula for sample
+  size calculations in clinical trials with multiple co-primary continuous endpoints.
+  \emph{Pharmaceut. Statist.}, \bold{11}: 118-128. doi:10.1002/pst.505
+
+  Sozu, T. and Sugimoto, T. and Hamasaki, T. and Evans, S.R. (2015). \emph{Sample
+  Size Determination in Clinical Trials with Multiple Endpoints}. Springer Briefs in
+  Statistics, ISBN 978-3-319-22005-5.
+}
+\seealso{ \code{\link{power.mpe.unknown.var}}, \code{\link{mpe.z.test}} }
+\note{The function appeared first in package \pkg{mpe} now archived on CRAN.}
+\examples{
+## compute power
+power.mpe.known.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
+
+## compute sample size
+power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+                    sig.level = 0.025)
+
+## known covariance matrix
+Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+                  0.840, 1.960, 0.168, 1.568,
+                  1.296, 0.168, 1.440, 0.420,
+                  0.840, 1.568, 0.420, 1.960), ncol = 4)
+## compute power
+power.mpe.known.var(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+## equivalent: known SDs and correlation rho
+power.mpe.known.var(K = 4, n = 60,delta = c(0.5, 0.75, 0.5, 0.75),
+                    SD = c(1.2, 1.4, 1.2, 1.4), 
+                    rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+}
+\keyword{htest}
+\keyword{multivariate}
