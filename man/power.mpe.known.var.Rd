@@ -48,8 +48,9 @@ computed one) augemented with method and note elements.
   Size Determination in Clinical Trials with Multiple Endpoints}. Springer Briefs in
   Statistics, ISBN 978-3-319-22005-5.
 }
-\seealso{ \code{\link{power.mpe.unknown.var}}, \code{\link{mpe.z.test}} }
-\note{The function appeared first in package \pkg{mpe} now archived on CRAN.}
+\author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
+\note{The function appeared first in package \pkg{mpe}, which is now archived on CRAN.}
+\seealso{ \code{\link{power.mpe.unknown.var}}, \code{\link[MKinfer]{mpe.z.test}} }
 \examples{
 ## compute power
 power.mpe.known.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
