@@ -58,7 +58,7 @@
   Statistics, ISBN 978-3-319-22005-5.
 }
 \author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
-\note{The function appeared first in package \pkg{mpe}, which is now archived on CRAN.}
+\note{The function first appeared in package \pkg{mpe}, which is now archived on CRAN.}
 \seealso{ \code{\link{power.mpe.known.var}}, \code{\link[MKinfer]{mpe.t.test}} }
 \examples{
 ## compute power

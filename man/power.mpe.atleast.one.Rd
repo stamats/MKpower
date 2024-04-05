@@ -48,7 +48,7 @@ computed one) augmented with method and note elements.
   Statistics, ISBN 978-3-319-22005-5.
 }
 \author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
-\note{The function appeared first in package \pkg{mpe}, which is now archived on CRAN.}
+\note{The function first appeared in package \pkg{mpe}, which is now archived on CRAN.}
 \examples{
 ## compute power
 power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(1,1)), power = 0.8)
