@@ -50,7 +50,7 @@ computed one) augemented with method and note elements.
 }
 \author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 \note{The function first appeared in package \pkg{mpe}, which is now archived on CRAN.}
-\seealso{ \code{\link{power.mpe.unknown.var}}, \code{\link[MKinfer]{mpe.z.test}} }
+\seealso{ \code{\link{power.mpe.unknown.var}} }
 \examples{
 ## compute power
 power.mpe.known.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))

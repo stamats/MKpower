@@ -59,7 +59,7 @@
 }
 \author{Srinath Kolampally, Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 \note{The function first appeared in package \pkg{mpe}, which is now archived on CRAN.}
-\seealso{ \code{\link{power.mpe.known.var}}, \code{\link[MKinfer]{mpe.t.test}} }
+\seealso{ \code{\link{power.mpe.known.var}} }
 \examples{
 ## compute power
 \dontrun{
