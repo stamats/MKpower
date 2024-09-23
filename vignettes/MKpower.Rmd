@@ -44,9 +44,9 @@ power.prop1.test(p1 = 0.4, power = 0.8, cont.corr = FALSE)
 Next, we compute the sample size via the respective asymptotic confidence interval.
 ```{r}
 ## with continuity correction
-ssize.propCI(prop = 0.4, width = 0.14)
+ssize.prop.ci(prop = 0.4, width = 0.14)
 ## without continuity correction
-ssize.propCI(prop = 0.4, width = 0.14, method = "wald")
+ssize.prop.ci(prop = 0.4, width = 0.14, method = "wald")
 ```
 
 
@@ -180,9 +180,9 @@ of diagnostic test [@Flahault2005]. The calculation is based on a one-sided
 confidence interval.
 ```{r}
 ## see n2 on page 1202 of Chu and Cole (2007)
-power.diagnostic.test(sens = 0.99, delta = 0.14, power = 0.95) # 40
-power.diagnostic.test(sens = 0.99, delta = 0.13, power = 0.95) # 43
-power.diagnostic.test(sens = 0.99, delta = 0.12, power = 0.95) # 47
+ssize.sens.ci(sens = 0.99, delta = 0.14, power = 0.95) # 40
+ssize.sens.ci(sens = 0.99, delta = 0.13, power = 0.95) # 43
+ssize.spec.ci(spec = 0.99, delta = 0.12, power = 0.95) # 47
 ```
 
 Given an expected AUC we can compute sample size, power (assurance probability), 
