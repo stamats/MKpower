@@ -175,12 +175,21 @@ power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, app
 
 ## Diagnostic Test
 Given an expected sensitivity and specificity we can compute sample size, 
-power, delta or significance level of diagnostic test [@Flahault2005].
+power (assurance probability), delta or significance level (error probability) 
+of diagnostic test [@Flahault2005]. The calculation is based on a one-sided 
+confidence interval.
 ```{r}
 ## see n2 on page 1202 of Chu and Cole (2007)
 power.diagnostic.test(sens = 0.99, delta = 0.14, power = 0.95) # 40
 power.diagnostic.test(sens = 0.99, delta = 0.13, power = 0.95) # 43
 power.diagnostic.test(sens = 0.99, delta = 0.12, power = 0.95) # 47
+```
+
+Given an expected AUC we can compute sample size, power (assurance probability), 
+delta or significance level (error probability) of the AUC based on a one-sided
+confidence interval.
+```{r}
+ssize.auc.ci(AUC = 0.9, delta = 0.1, power = 0.95)
 ```
 
 The sample size planning for developing binary classifiers in case of high
