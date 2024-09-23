@@ -17,7 +17,7 @@ ssize.auc.ci(AUC = NULL, delta = NULL, n = NULL, sig.level = 0.05,
  \item{power}{Assurance probability of confidence interval (1 minus Type II error probability)}
  \item{prev}{Expected prevalence, if \code{NULL} prevalence is ignored which means \code{prev = 0.5}
  is assumed.}
- \item{NMAX}{Maximum sample size considered in case \code{method = "exact"}.}
+ \item{NMAX}{Maximum sample size considered.}
 }
 
 \details{
