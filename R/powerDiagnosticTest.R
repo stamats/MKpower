@@ -89,13 +89,13 @@ power.diagnostic.test <- function(sens = NULL, spec = NULL,
   if(is.null(spec)){
     NOTE <- "n is number of cases, n1 is number of controls"
     res <- structure(list(sens = sens, n = n, n1 = n1, delta = delta, 
-                          sig.level = sig.level, power = power, prev = prev, 
+                          sig.level = sig.level, power = power, prev = pr, 
                           note = NOTE, method = METHOD), 
             class = "power.htest")  
   }else{
     NOTE <- "n is number of controls, n1 is number of cases"
     res <- structure(list(spec = spec, n = n, n1 = n1, delta = delta, 
-                          sig.level = sig.level, power = power, prev = prev, 
+                          sig.level = sig.level, power = power, prev = pr, 
                           note = NOTE, method = METHOD), 
                      class = "power.htest")
   }

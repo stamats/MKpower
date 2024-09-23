@@ -68,6 +68,6 @@ ssize.auc.ci <- function(AUC = NULL, delta = NULL, n = NULL, sig.level = 0.05,
   NOTE <- "n is number of cases, n1 is number of controls"
   structure(list(AUC = AUC, n = prev*n, n1 = (1-prev)*n, delta = delta, 
                  sig.level = sig.level, power = power, prev = prev, 
-                 note = NOTE), 
+                 note = NOTE, method = METHOD), 
             class = "power.htest")  
 }
