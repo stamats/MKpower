@@ -1,5 +1,7 @@
 \name{power.diagnostic.test}
 \alias{power.diagnostic.test}
+\alias{ssize.sens.ci}
+\alias{ssize.spec.ci}
 \title{Power Calculations for Diagnostic Tests}
 \description{
  Compute sample size, power, delta, or significance level of a diagnostic test
@@ -11,6 +13,12 @@ power.diagnostic.test(sens = NULL, spec = NULL,
                       power = NULL, prev = NULL, 
                       method = c("exact", "asymptotic"),
                       NMAX = 1e4)
+ssize.sens.ci(sens = NULL, n = NULL, delta = NULL, sig.level = 0.05,
+              power = NULL, prev = NULL, method = c("exact", "asymptotic"),
+              NMAX = 1e4)
+ssize.spec.ci(spec = NULL, n = NULL, delta = NULL, sig.level = 0.05,
+              power = NULL, prev = NULL, method = c("exact", "asymptotic"),
+              NMAX = 1e4)
 }
 \arguments{
  \item{sens}{Expected sensitivity; either \code{sens} or \code{spec} has to be specified.}
@@ -95,6 +103,12 @@ power.diagnostic.test(sens = 0.95, delta = 0.1, n = 102, power = 0.95,
                       sig.level = NULL) ## 0.0471
 ## yields 102 not 93!
 power.diagnostic.test(sens = 0.95, delta = 0.1, power = 0.95)
+
+## function only for sensitivity
+ssize.sens.ci(sens = 0.99, delta = 0.14, power = 0.95) # 40
+
+## function only for specificity
+ssize.spec.ci(spec = 0.99, delta = 0.13, power = 0.95) # 43
 }
 \keyword{htest}
 

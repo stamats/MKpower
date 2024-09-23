@@ -101,3 +101,21 @@ power.diagnostic.test <- function(sens = NULL, spec = NULL,
   }
   res
 }
+ssize.sens.ci <- function(sens = NULL, n = NULL, delta = NULL, sig.level = 0.05,
+                          power = NULL, prev = NULL, 
+                          method = c("exact", "asymptotic"),
+                          NMAX = 1e4){
+  power.diagnostic.test(sens = sens, spec = NULL,
+                        n = n, delta = delta, sig.level = sig.level,
+                        power = power, prev = prev, 
+                        method = method, NMAX = NMAX)  
+}
+ssize.spec.ci <- function(spec = NULL, n = NULL, delta = NULL, sig.level = 0.05,
+                          power = NULL, prev = NULL, 
+                          method = c("exact", "asymptotic"),
+                          NMAX = 1e4){
+  power.diagnostic.test(sens = NULL, spec = spec,
+                        n = n, delta = delta, sig.level = sig.level,
+                        power = power, prev = prev, 
+                        method = method, NMAX = NMAX)  
+}
