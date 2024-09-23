@@ -3,6 +3,16 @@
 ###############################################################################
 
 ###########################################################
+## Version 1.0
+###########################################################
+- introduced function ssize.prop.ci as an alias for ssize.propCI.
+- introduced functions ssize.sens.ci and ssize.spec.ci based on function 
+  power.diagnostic.test.
+- added function ssize.auc.ci for sample size calculation based on confidence
+  interval for AUC.
+
+
+###########################################################
 ## Version 0.9
 ###########################################################
 - added functions to compute power and sample size for multiple primary 
