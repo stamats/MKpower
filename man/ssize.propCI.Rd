@@ -1,11 +1,14 @@
 \name{ssize.propCI}
 \alias{ssize.propCI}
+\alias{ssize.prop.ci}
 \encoding{UTF-8}
 \title{Sample Size Calculation for Confidence Interval of a Proportion}
 \description{
   Compute the sample size for the two-sided confidence interval of a single proportion.
 }
 \usage{
+ssize.prop.ci(prop, width, conf.level = 0.95,  method = "wald-cc")
+
 ssize.propCI(prop, width, conf.level = 0.95,  method = "wald-cc")
 }
 \arguments{

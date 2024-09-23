@@ -1,4 +1,4 @@
-ssize.propCI <- function(prop, width, conf.level = 0.95,  method = "wald-cc"){
+ssize.prop.ci <- function(prop, width, conf.level = 0.95,  method = "wald-cc"){
   METHODS <- c("wald", "wald-cc", "jeffreys", "clopper-pearson", "wilson", "agresti-coull")
   method <- pmatch(method, METHODS)
   
@@ -32,4 +32,7 @@ ssize.propCI <- function(prop, width, conf.level = 0.95,  method = "wald-cc"){
   NOTE <- "Two-sided confidence interval"
   structure(list(n = n, prop = prop, width = width, conf.level = conf.level,
                  note = NOTE, method = METHOD), class = "power.htest")
+}
+ssize.propCI <- function(prop, width, conf.level = 0.95,  method = "wald-cc"){
+  ssize.prop.ci(prop = prop, width = width, conf.level = conf.level, method = method)
 }
