@@ -1,5 +1,5 @@
 import("stats")
-importFrom("ggplot2", "ggplot", "aes_string", "geom_histogram", 
+importFrom("ggplot2", "ggplot", "aes", "geom_histogram", 
                       "geom_hline", "facet_grid", "labs", "geom_hex", 
                       "geom_line", "geom_text", "geom_vline", "xlab", 
                       "ylab", "geom_point", "after_stat")
@@ -10,6 +10,7 @@ importFrom("MKinfer", "volcano")
 importFrom("qqplotr", "stat_qq_point", "stat_qq_line", "stat_qq_band")
 importFrom("coin", "wilcox_test", "pvalue", "statistic", "confint")
 importFrom("mvtnorm", "pmvnorm")
+importFrom("rlang", ".data")
 export(power.ancova,
        power.diagnostic.test,
        power.hsu.t.test,

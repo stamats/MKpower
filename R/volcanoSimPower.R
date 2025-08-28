@@ -44,22 +44,22 @@ volcano.sim.power.ttest <- function(x, alpha = 1, shape = 19,
                           hypothesis = c(rep("H1", 3), rep("H0", 3)),
                           label = Lab)
     if(hex){
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10() + 
         geom_line(data = data.frame(x = c(mu, mu), y = c(min(DF$pvalue)/10, max(DF$pvalue))),
-                  aes_string(x = "x", y = "y")) +
+                  aes(x = .data$x, y = .data$y)) +
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = min(DF$pvalue)/100, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = min(DF$pvalue)/100, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(hypothesis ~ test, scales = "free_y")
     }else{
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_point(alpha = alpha, shape = shape) + scale_y_neglog10() + 
         geom_line(data = data.frame(x = c(mu, mu), y = c(min(DF$pvalue)/10, max(DF$pvalue))),
-                  aes_string(x = "x", y = "y")) +
+                  aes(x = .data$x, y = .data$y)) +
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = min(DF$pvalue)/100, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = min(DF$pvalue)/100, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(hypothesis ~ test, scales = "free_y")
@@ -75,20 +75,20 @@ volcano.sim.power.ttest <- function(x, alpha = 1, shape = 19,
                           hypothesis = rep("H1", 3),
                           label = Lab)
     if(hex){
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10()+
         geom_vline(xintercept = mu) + 
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = Inf, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(~ test)
     }else{
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_point(alpha = alpha, shape = shape) + scale_y_neglog10()+
         geom_vline(xintercept = mu) + 
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = Inf, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(~ test)
@@ -184,22 +184,22 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
                             label = Lab)
     }
     if(hex){
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10() + 
         geom_line(data = data.frame(x = c(mu, mu), y = c(min(DF$pvalue)/10, max(DF$pvalue))),
-                  aes_string(x = "x", y = "y")) +
+                  aes(x = .data$x, y = .data$y)) +
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = min(DF$pvalue)/100, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = min(DF$pvalue)/100, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(hypothesis ~ test, scales = "free_y")
     }else{
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_point(alpha = alpha, shape = shape) + scale_y_neglog10() + 
         geom_line(data = data.frame(x = c(mu, mu), y = c(min(DF$pvalue)/10, max(DF$pvalue))),
-                  aes_string(x = "x", y = "y")) +
+                  aes(x = .data$x, y = .data$y)) +
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = min(DF$pvalue)/100, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = min(DF$pvalue)/100, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(hypothesis ~ test, scales = "free_y")
@@ -225,20 +225,20 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
                             label = Lab)
     }
     if(hex){
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10()+
         geom_vline(xintercept = mu) + 
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = Inf, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(~ test)
     }else{
-      gg <- ggplot(DF, aes_string(x = "MD", y = "pvalue")) + 
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_point(alpha = alpha, shape = shape) + scale_y_neglog10()+
         geom_vline(xintercept = mu) + 
         xlab("mean difference") + ylab("-log10(p value)") +
-        geom_text(data = DF.text, aes_string(x = mu, y = Inf, label = "label"), 
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
                   vjust = 2, inherit.aes = FALSE) +
         geom_hline(yintercept = sig.level) +
         facet_grid(~ test)

@@ -4,7 +4,7 @@ qqunif <- function(x, ...){
 qqunif.default <- function(x, min = 0, max = 1, ...){
   DF <- data.frame(sample = x)
   dps <- list(min = min, max = max)
-  gg <- ggplot(DF, aes_string(sample = "sample")) + 
+  gg <- ggplot(DF, aes(sample = .data$sample)) + 
     stat_qq_point(distribution = "unif", dparams = dps) +
     stat_qq_band(distribution = "unif", dparams = dps) +
     qqplotr::stat_qq_line(distribution = "unif", dparams = dps) +
@@ -49,11 +49,11 @@ qqunif.sim.power.ttest <- function(x, color.line = "orange", shape = 19, size = 
                                        "Hsu two-sample t-test"), 2),
                           hypothesis = c(rep("H1", 3), rep("H0", 3)),
                           label = Lab)
-    gg <- ggplot(DF, aes_string(sample = "pvalue")) + 
+    gg <- ggplot(DF, aes(sample = .data$pvalue)) + 
       stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
       #      stat_qq_band(distribution = "unif", color = "red") +
       qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(hypothesis ~ test, scales = "free_y")
@@ -67,11 +67,11 @@ qqunif.sim.power.ttest <- function(x, color.line = "orange", shape = 19, size = 
                                    "Hsu two-sample t-test"),
                           hypothesis = rep("H1", 3),
                           label = Lab)
-    gg <- ggplot(DF, aes_string(sample = "pvalue")) + 
+    gg <- ggplot(DF, aes(sample = .data$pvalue)) + 
       stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
       #      stat_qq_band(distribution = "unif", color = "red") +
       qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(~ test)
@@ -151,11 +151,11 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
                             hypothesis = c(rep("H1", 2), rep("H0", 2)),
                             label = Lab)
     }
-    gg <- ggplot(DF, aes_string(sample = "pvalue")) + 
+    gg <- ggplot(DF, aes(sample = .data$pvalue)) + 
       stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
       #      stat_qq_band(distribution = "unif", color = "red") +
       qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(hypothesis ~ test, scales = "free_y")
@@ -179,11 +179,11 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
                             hypothesis = rep("H1", 2),
                             label = Lab)
     }
-    gg <- ggplot(DF, aes_string(sample = "pvalue")) + 
+    gg <- ggplot(DF, aes(sample = .data$pvalue)) + 
       stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
       #      stat_qq_band(distribution = "unif", color = "red") +
       qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(~ test)

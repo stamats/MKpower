@@ -35,10 +35,10 @@ hist.sim.power.ttest <- function(x, color.hline = "orange", ...){
                                        "Hsu two-sample t-test"), 2),
                           hypothesis = c(rep("H1", 3), rep("H0", 3)),
                           label = Lab)
-    gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
+    gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 
+      geom_histogram(aes(y = after_stat(density)), binwidth = 0.01) + 
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       facet_grid(hypothesis ~ test, scales = "free_y")
   }else{
@@ -51,9 +51,9 @@ hist.sim.power.ttest <- function(x, color.hline = "orange", ...){
                                    "Hsu two-sample t-test"),
                           hypothesis = rep("H1", 3),
                           label = Lab)
-    gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+    gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 
+      geom_histogram(aes(y = after_stat(density)), binwidth = 0.01) + 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
       facet_grid(~ test)
@@ -133,10 +133,10 @@ hist.sim.power.wtest <- function(x, color.hline = "orange", ...){
                             hypothesis = c(rep("H1", 2), rep("H0", 2)),
                             label = Lab)
     }
-    gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
+    gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 
+      geom_histogram(aes(y = after_stat(density)), binwidth = 0.01) + 
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       facet_grid(hypothesis ~ test, scales = "free_y")
   }else{
@@ -159,9 +159,9 @@ hist.sim.power.wtest <- function(x, color.hline = "orange", ...){
                             hypothesis = rep("H1", 2),
                             label = Lab)
     }
-    gg <- ggplot(data = DF, aes_string(x = "pvalue")) + 
-      geom_histogram(aes_string(y = "after_stat(density)"), binwidth = 0.01) + 
-      geom_text(data = DF.text, aes_string(x = 0.5, y = Inf, label = "label"), 
+    gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 
+      geom_histogram(aes(y = after_stat(density)), binwidth = 0.01) + 
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
                 vjust = 2, inherit.aes = FALSE) +
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
       facet_grid(~ test)
