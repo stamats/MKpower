@@ -19,7 +19,8 @@ single proportion (Fleiss et al. (2003), ISBN:978-0-471-52629-2; Piegorsch (2004
 comparing two negative binomial rates (Zhu and Lakkis (2014), <https://doi.org/10.1002/sim.5947>), 
 ANCOVA (Shieh (2020), <https://doi.org/10.1007/s11336-019-09692-3>), reference ranges 
 (Jennen-Steinmetz and Wellek (2005), <https://doi.org/10.1002/sim.2177>), multiple 
-primary endpoints (Sozu et al. (2015), ISBN:978-3-319-22005-5), and AUC (Hanley and McNeil (1982), <https://doi.org/10.1148/radiology.143.1.7063747>).
+primary endpoints (Sozu et al. (2015), ISBN:978-3-319-22005-5), and 
+AUC (Hanley and McNeil (1982), <https://doi.org/10.1148/radiology.143.1.7063747>).
 
 ## Installation
 
