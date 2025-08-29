@@ -7,6 +7,7 @@
 ###########################################################
 - minor changes to output of power.diagnostic.test and ssize.auc.ci
 - use aes in combination with .data from package rlang instead of aes_string
+- added package hexbin to Suggests field
 
 
 ###########################################################
