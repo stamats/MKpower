@@ -28,15 +28,7 @@ ssize.auc.ci(AUC = NULL, delta = NULL, n = NULL, sig.level = 0.05,
 
   The computations use the variance of the AUC derived by Hanley and McNeil (1982)
   and incorporate an additional assurance probability (power) as in the approach
-  of Flahault et al. (2005).
-  
-  As noted in Chu and Cole (2007) power is not a monotonically increasing
-  function in n but rather saw toothed (see also Chernick and Liu (2002)).
-  Hence, in our calculations we use the more conservative approach II); 
-  i.e., the minimum sample size \code{n} such that the actual power is 
-  larger or equal \code{power} andsuch that for any sample size larger 
-  than \code{n} it also holds that the actual power is larger or equal 
-  \code{power}.
+  of Flahault et al. (2005); see also Kohl and Muench (2024).
 }
 \value{
   Object of class \code{"power.htest"}, a list of the arguments
@@ -51,6 +43,9 @@ ssize.auc.ci(AUC = NULL, delta = NULL, n = NULL, sig.level = 0.05,
   
   J.A. Hanley, B.J. McNeil (1982). The meaning and use of the area under a 
   receiver operating characteristic (ROC) curve. \emph{Radiology}, \bold{143}(1):29-36.
+  
+  M. Kohl, F. Muench (2024). Statistik Teil 12: Fallzahlplanung. 
+  \emph{Die Perfusiologie}, \bold{2024}(4):124-127.
 }
 
 \author{Matthias Kohl \email{Matthias.Kohl@stamats.de}}
