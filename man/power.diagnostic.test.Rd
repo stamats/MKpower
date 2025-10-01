@@ -79,8 +79,8 @@ ssize.spec.ci(spec = NULL, n = NULL, delta = NULL, sig.level = 0.05,
 \author{Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 
 \note{
-  \code{uniroot} is used to solve power equation for unknowns, so
-  you may see errors from it, notably about inability to bracket the
+  \code{uniroot} is used to solve the power equation if \code{delta} is unknown, 
+  so you may see errors from it, notably about inability to bracket the
   root when invalid arguments are given.
 }
 \seealso{\code{\link{uniroot}}}

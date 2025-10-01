@@ -48,17 +48,11 @@ power.diagnostic.test <- function(sens = NULL, spec = NULL,
       }
       delta <- uniroot(f = fun.delta, interval = c(1e-10,prob-1e-10))$root
     }else if(is.null(power)){
-      fun.power <- function(power){
-        lo <- qbinom(1-power, size = n, prob = prob) - 1
-        pbinom(lo, size = n, prob = prob.delta, lower.tail = FALSE) - sig.level
-      }
-      power <- uniroot(f = fun.power, interval = c(1e-10,1-1e-10))$root      
+      power <- pbinom(q = qbinom(p = 1-sig.level, size = n, prob = prob.delta), 
+                      size = n, prob = prob, lower.tail = FALSE)
     }else if(is.null(sig.level)){
-      fun.sig.level <- function(sig.level){
-        lo <- qbinom(1-power, size = n, prob = prob) - 1
-        pbinom(lo, size = n, prob = prob.delta, lower.tail = FALSE) - sig.level
-      }
-      sig.level <- uniroot(f = fun.sig.level, interval = c(1e-10,1-1e-10))$root            
+      lo <- qbinom(1-power, size = n, prob = prob) - 1
+      sig.level <- pbinom(lo, size = n, prob = prob.delta, lower.tail = FALSE)
     }else stop("internal error")
   }
   
