@@ -3,6 +3,14 @@
 ###############################################################################
 
 ###########################################################
+## Version 1.2
+###########################################################
+- use direct calculations instead of uniroot to determine power and sig.level
+  in function power.diagnostic.test for exact method as proposed by 
+  Karen Mkhitaryan
+
+
+###########################################################
 ## Version 1.1
 ###########################################################
 - minor changes to output of power.diagnostic.test and ssize.auc.ci
