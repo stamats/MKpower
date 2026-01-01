@@ -51,22 +51,34 @@ ssize.prop.ci(prop = 0.4, width = 0.14, method = "wald")
 
 
 ## Welch Two-Sample t-Test
-For computing the sample size of the Welch t-test, we only consider the situation 
-of equal group size (balanced design).
+For computing the sample size of the Welch t-test, we consider the situation 
+of equal as well as unequal group sizes (balanced and unbalanced designs).
 ```{r}
 ## identical results as power.t.test, since sd = sd1 = sd2 = 1
+power.t.test(n = 20, delta = 1)
 power.welch.t.test(n = 20, delta = 1)
+power.t.test(power = 0.90, delta = 1)
 power.welch.t.test(power = .90, delta = 1)
+power.t.test(power = 0.90, delta = 1, alternative = "one.sided")
 power.welch.t.test(power = .90, delta = 1, alternative = "one.sided")
 
 ## sd1 = 0.5, sd2 = 1
-power.welch.t.test(delta = 1, sd1 = 0.5, sd2 = 1, power = 0.9)
+power.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 54+54 = 108
+power.welch.t.test(n = 54, delta = 0.5, sd1 = 0.5, sd2 = 1)
+power.welch.t.test2(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 22+87 = 109
+power.welch.t.test2(n = c(22, 87), delta = 0.5, sd1 = 0.5, sd2 = 1)
+ssize.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 35+62 = 97
+power.welch.t.test2(n = c(35, 62), delta = 0.5, sd1 = 0.5, sd2 = 1)
 ```
+
+The last example demonstrates that in case of unequal variances unequal group 
+sizes (i.e. unbalanced design) may lead to a clearly smaller total sample size 
+(sum of group sample sizes) than equal group sizes (i.e. balanced design).
 
 
 ## Hsu Two-Sample t-Test
 For computing the sample size of the Hsu t-test [@Hedderich2018], we only consider 
-the situation of equal group size (balanced design).
+the situation of equal group sizes (balanced design).
 ```{r}
 ## slightly more conservative than Welch t-test
 power.hsu.t.test(n = 20, delta = 1)

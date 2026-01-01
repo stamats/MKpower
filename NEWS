@@ -8,6 +8,8 @@
 - use direct calculations instead of uniroot to determine power and sig.level
   in function power.diagnostic.test for exact method as proposed by 
   Karen Mkhitaryan
+- introduced function power.welch.t.test2 which allows unequal sample sizes 
+  per group
 
 
 ###########################################################
