@@ -76,6 +76,7 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
     }
   }
   if(!is.null(rx.H0) & !is.null(ry.H0)){
+    res.H0$df <- df
     if(alternative == "less"){
       res.H0$pvalue <- pt(res.H0$statistic, df = df)
       if(conf.int){
