@@ -13,6 +13,9 @@
 - added function ssize.welch.t.test which allows unequal sample sizes per
   group and minimizes the total sample size (sum of the group sample sizes)
 - corrected bug: function approximate of package coin was not imported
+- added Xiao t-test to sim.power.t.test and restructured the function
+- restructured methods hist.sim.power.ttest, qqunif.sim.power.ttest, 
+  volcano.sim.power.ttest
 
 
 ###########################################################
