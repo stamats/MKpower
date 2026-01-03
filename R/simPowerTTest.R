@@ -34,7 +34,8 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   }
   
   ## set-up for parallel computing
-  PARA <- any(c("xiao", "perm.stud", "perm.welch", "boot.stud", "boot.welch") %in% methods)
+  PARA <- any(c("xiao", "perm.student", "perm.welch", "boot.student", 
+                "boot.welch") %in% methods)
   if(parallel && PARA){
     if(!("package:MKinfer" %in% search())){
       DETACH <- TRUE

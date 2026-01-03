@@ -26,8 +26,8 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
  \item{mu}{ true value of the location shift for the null hypothesis.}
  \item{alternative}{one- or two-sided test.  Can be abbreviated.}
  \item{methods}{ character, one or more of the following names: \code{"student"},
-   \code{"welch"}, \code{"hsu"}, \code{"xiao"}, \code{"perm.stud"}, 
-   \code{"perm.welch"}, \code{"boot.stud"}, \code{"boot.welch"}.}
+   \code{"welch"}, \code{"hsu"}, \code{"xiao"}, \code{"perm.student"}, 
+   \code{"perm.welch"}, \code{"boot.student"}, \code{"boot.welch"}.}
  \item{iter}{ single integer, number of interations of the simulations.}
  \item{R}{ number of (Monte-Carlo) permutations for permutation and bootstrap tests.}
  \item{useCombn}{logical; use all combinations instead of permutations in the
