@@ -306,8 +306,8 @@ questioned whether pre-testing of assumptions is appropriate/useful at least fro
 a practical point of view [@Zimmerman2004; @Rasch2011; @Rochon2012; @Hoekstra2012].
 
 We provide functions to simulate power and type-I-error of classical [@student1908], 
-Welch [@Welch1947] and Hsu [@Hsu1938] t-tests as well as of Wilcoxon-Mann-Whitney
-tests [@Wilcoxon1945; @Mann1947].
+Welch [@Welch1947], Hsu [@Hsu1938] and Xiao [@Xiao2018] t-tests as well as of 
+Wilcoxon-Mann-Whitney tests [@Wilcoxon1945; @Mann1947].
 ```{r}
 ## functions to simulate the data
 ## group 1
@@ -321,8 +321,10 @@ power.welch.t.test(n = 10, delta = 3, sd1 = 1, sd2 = 3)
 power.hsu.t.test(n = 10, delta = 3, sd1 = 1, sd2 = 3)
 ## simulation
 res.t <- sim.power.t.test(nx = 10, rx = rx, rx.H0 = rx.H0,
-                          ny = 10, ry = ry, ry.H0 = ry.H0)
+                          ny = 10, ry = ry, ry.H0 = ry.H0, 
+                          methods = c("student", "welch", "hsu"))
 res.t
+## low number of iterations to reduce computation time
 res.w <- sim.power.wilcox.test(nx = 10, rx = rx, rx.H0 = rx.H0,
                                ny = 10, ry = ry, ry.H0 = ry.H0)
 res.w
@@ -332,7 +334,7 @@ For further investigation of the results, we provide some diagnostic plots.
 ```{r, fig.width=7, fig.height=7}
 ## t-tests
 hist(res.t)
-qqunif(res.t, alpha = 0.05)
+qqunif(res.t, alpha = 0.1)
 volcano(res.t, hex = TRUE)
 ##  Wilcoxon-Mann-Whitney tests
 hist(res.w)
