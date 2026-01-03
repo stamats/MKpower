@@ -16,6 +16,7 @@
 - added Xiao t-test to sim.power.t.test and restructured the function
 - restructured methods hist.sim.power.ttest, qqunif.sim.power.ttest, 
   volcano.sim.power.ttest
+- added permutation and bootstrap t-test to sim.power.t.test
 
 
 ###########################################################
