@@ -10,7 +10,8 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                  sig.level = 0.05, conf.int = FALSE, mu = 0, 
                  alternative = c("two.sided", "less", "greater"), 
                  methods = c("student", "welch", "hsu", "xiao"),
-                 iter = 10000, parallel = TRUE, cl = NULL)
+                 iter = 10000, R = 9999, useCombn = FALSE, 
+                 parallel = TRUE, cl = NULL)
 }
 \arguments{
  \item{nx}{ single numeric, sample size of first group.}
@@ -25,8 +26,12 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
  \item{mu}{ true value of the location shift for the null hypothesis.}
  \item{alternative}{one- or two-sided test.  Can be abbreviated.}
  \item{methods}{ character, one or more of the following names: \code{"student"},
-   \code{"welch"}, \code{"hsu"}, \code{"xiao"}, \code{"perm"}, \code{"bood"}.}
+   \code{"welch"}, \code{"hsu"}, \code{"xiao"}, \code{"perm.stud"}, 
+   \code{"perm.welch"}, \code{"boot.stud"}, \code{"boot.welch"}.}
  \item{iter}{ single integer, number of interations of the simulations.}
+ \item{R}{ number of (Monte-Carlo) permutations for permutation and bootstrap tests.}
+ \item{useCombn}{logical; use all combinations instead of permutations in the
+    case of the two-sample t-test; see \code{\link[MKinfer:perm.t.test]{perm.t.test}}.}
   \item{parallel}{logical; use parellel computing via function \code{\link{parRapply}}
     in the case of method \code{"xiao"}.}
   \item{cl}{a cluster object, created by package \code{\link[parallel:makeCluster]{parallel}} 
