@@ -6,11 +6,13 @@ importFrom("ggplot2", "ggplot", "aes", "geom_histogram",
 importFrom("matrixTests", "row_wilcoxon_twosample", "row_wilcoxon_onesample",
                           "row_t_equalvar", "row_t_welch")
 importFrom("MKdescr", "scale_y_neglog10")
-importFrom("MKinfer", "volcano")
+importFrom("MKinfer", "volcano", "dgt", "pgt", "qgt")
 importFrom("qqplotr", "stat_qq_point", "stat_qq_line", "stat_qq_band")
 importFrom("coin", "wilcox_test", "pvalue", "statistic", "confint", "approximate")
 importFrom("mvtnorm", "pmvnorm")
 importFrom("rlang", ".data")
+importFrom("hypergeo", "hypergeo")
+importFrom("parallel", "detectCores", "makePSOCKcluster", "stopCluster")
 export(power.ancova,
        power.diagnostic.test,
        power.hsu.t.test,
