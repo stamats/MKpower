@@ -3,46 +3,118 @@ volcano.sim.power.ttest <- function(x, alpha = 1, shape = 19,
   iter <- x$SetUp$iter
   mu <- x$SetUp$mu
   sig.level <- x$SetUp$sig.level
-  DF <- data.frame(pvalue = c(x$Classical$H1$pvalue,
-                              x$Welch$H1$pvalue,
-                              x$Hsu$H1$pvalue),
-                   MD = c(x$Classical$H1$mean.diff,
-                          x$Welch$H1$mean.diff,
-                          x$Hsu$H1$mean.diff),
-                   test = c(rep("Classical two-sample t-test", iter),
-                            rep("Welch two-sample t-test", iter),
-                            rep("Hsu two-sample t-test", iter)),
-                   hypothesis = rep("H1", 3*iter))
-  if(!is.null(x$Classical$H0)){
-    DF1 <- data.frame(pvalue = c(x$Classical$H0$pvalue,
-                                 x$Welch$H0$pvalue,
-                                 x$Hsu$H0$pvalue),
-                      MD = c(x$Classical$H0$mean.diff,
-                             x$Welch$H0$mean.diff,
-                             x$Hsu$H0$mean.diff),
-                      test = c(rep("Classical two-sample t-test", iter),
-                               rep("Welch two-sample t-test", iter),
-                               rep("Hsu two-sample t-test", iter)),
-                      hypothesis = rep("H0", 3*iter))
-    DF <- rbind(DF, DF1)
+  DF1 <- data.frame(NULL)
+  if("Student" %in% names(x)){
+    tmp <- data.frame(pvalue = x$Student$H1$pvalue,
+                      MD = x$Student$H1$mean.diff,
+                      test = rep("Student two-sample t-test", iter),
+                      hypothesis = rep("H1", iter))
+    DF1 <- rbind(DF1, tmp)
   }
-  DF$test <- factor(DF$test, levels = c("Classical two-sample t-test",
-                                        "Welch two-sample t-test",
-                                        "Hsu two-sample t-test"))
-  if(!is.null(x$Classical$H0)){
-    Lab <- round(c(sum(x$Classical$H1$pvalue < sig.level)/nrow(x$Classical$H1),
-                   sum(x$Welch$H1$pvalue < sig.level)/nrow(x$Welch$H1),
-                   sum(x$Hsu$H1$pvalue < sig.level)/nrow(x$Hsu$H1),
-                   sum(x$Classical$H0$pvalue < sig.level)/nrow(x$Classical$H0),
-                   sum(x$Welch$H0$pvalue < sig.level)/nrow(x$Welch$H0),
-                   sum(x$Hsu$H0$pvalue < sig.level)/nrow(x$Hsu$H0)), 4)
-    Lab[1:3] <- paste("emp. power:", Lab[1:3])
-    Lab[4:6] <- paste("emp. type-I-error:", Lab[4:6])
-    DF.text <- data.frame(test = rep(c("Classical two-sample t-test",
-                                       "Welch two-sample t-test",
-                                       "Hsu two-sample t-test"), 2),
-                          hypothesis = c(rep("H1", 3), rep("H0", 3)),
-                          label = Lab)
+  if("Welch" %in% names(x)){
+    tmp <- data.frame(pvalue = x$Welch$H1$pvalue,
+                      MD = x$Welch$H1$mean.diff,
+                      test = rep("Welch two-sample t-test", iter),
+                      hypothesis = rep("H1", iter))
+    DF1 <- rbind(DF1, tmp)
+  }
+  if("Hsu" %in% names(x)){
+    tmp <- data.frame(pvalue = x$Hsu$H1$pvalue,
+                      MD = x$Hsu$H1$mean.diff,
+                      test = rep("Hsu two-sample t-test", iter),
+                      hypothesis = rep("H1", iter))
+    DF1 <- rbind(DF1, tmp)
+  }
+  if("Xiao" %in% names(x)){
+    tmp <- data.frame(pvalue = x$Xiao$H1$pvalue,
+                      MD = x$Xiao$H1$mean.diff,
+                      test = rep("Xiao two-sample t-test", iter),
+                      hypothesis = rep("H1", iter))
+    DF1 <- rbind(DF1, tmp)
+  }
+  DF <- DF1
+  if(!is.null(x$SetUp$rx.H0) && !is.null(x$SetUp$ry.H0)){
+    DF0 <- data.frame(NULL)
+    if("Student" %in% names(x)){
+      tmp <- data.frame(pvalue = x$Student$H0$pvalue,
+                        MD = x$Student$H0$mean.diff,
+                        test = rep("Student two-sample t-test", iter),
+                        hypothesis = rep("H0", iter))
+      DF0 <- rbind(DF0, tmp)
+    }
+    if("Welch" %in% names(x)){
+      tmp <- data.frame(pvalue = x$Welch$H0$pvalue,
+                        MD = x$Welch$H0$mean.diff,
+                        test = rep("Welch two-sample t-test", iter),
+                        hypothesis = rep("H0", iter))
+      DF0 <- rbind(DF0, tmp)
+    }
+    if("Hsu" %in% names(x)){
+      tmp <- data.frame(pvalue = x$Hsu$H0$pvalue,
+                        MD = x$Hsu$H0$mean.diff,
+                        test = rep("Hsu two-sample t-test", iter),
+                        hypothesis = rep("H0", iter))
+      DF0 <- rbind(DF0, tmp)
+    }
+    if("Xiao" %in% names(x)){
+      tmp <- data.frame(pvalue = x$Xiao$H0$pvalue,
+                        MD = x$Xiao$H0$mean.diff,
+                        test = rep("Xiao two-sample t-test", iter),
+                        hypothesis = rep("H0", iter))
+      DF0 <- rbind(DF0, tmp)
+    }
+    DF <- rbind(DF1, DF0)
+  }
+  methods <- c("Student two-sample t-test", "Welch two-sample t-test",
+               "Hsu two-sample t-test", "Xiao two-sample t-test")
+  selected <- unique(DF$test)
+  DF$test <- factor(DF$test, levels = methods[methods %in% selected])
+  Lab1 <- Lab0 <- Test <- NULL
+  if("Student" %in% names(x)){
+    if(!is.null(x$Student$H0)){
+      Lab1 <- c(Lab1, sum(x$Student$H1$pvalue < sig.level)/nrow(x$Student$H1))
+      Lab0 <- c(Lab0, sum(x$Student$H0$pvalue < sig.level)/nrow(x$Student$H0))
+    }else{
+      Lab1 <- c(Lab1, sum(x$Student$H1$pvalue < sig.level)/nrow(x$Student$H1))
+    }
+    Test <- c(Test, "Student two-sample t-test")
+  }
+  if("Welch" %in% names(x)){
+    if(!is.null(x$Welch$H0)){
+      Lab1 <- c(Lab1, sum(x$Welch$H1$pvalue < sig.level)/nrow(x$Welch$H1))
+      Lab0 <- c(Lab0, sum(x$Welch$H0$pvalue < sig.level)/nrow(x$Welch$H0))
+    }else{
+      Lab1 <- c(Lab1, sum(x$Welch$H1$pvalue < sig.level)/nrow(x$Welch$H1))
+    }
+    Test <- c(Test, "Welch two-sample t-test")
+  }
+  if("Hsu" %in% names(x)){
+    if(!is.null(x$Hsu$H0)){
+      Lab1 <- c(Lab1, sum(x$Hsu$H1$pvalue < sig.level)/nrow(x$Hsu$H1))
+      Lab0 <- c(Lab0, sum(x$Hsu$H0$pvalue < sig.level)/nrow(x$Hsu$H0))
+    }else{
+      Lab1 <- c(Lab1, sum(x$Hsu$H1$pvalue < sig.level)/nrow(x$Hsu$H1))
+    }
+    Test <- c(Test, "Hsu two-sample t-test")
+  }
+  if("Xiao" %in% names(x)){
+    if(!is.null(x$Xiao$H0)){
+      Lab1 <- c(Lab1, sum(x$Xiao$H1$pvalue < sig.level)/nrow(x$Xiao$H1))
+      Lab0 <- c(Lab0, sum(x$Xiao$H0$pvalue < sig.level)/nrow(x$Xiao$H0))
+    }else{
+      Lab1 <- c(Lab1, sum(x$Xiao$H1$pvalue < sig.level)/nrow(x$Xiao$H1))
+    }
+    Test <- c(Test, "Xiao two-sample t-test")
+  }
+  Lab1 <- paste0("emp. power: ", Lab1)
+  if(!is.null(Lab0)) Lab0 <- paste0("emp. type-I-error: ", Lab0)
+  
+  if(!is.null(Lab0)){
+    DF.text <- data.frame(test = rep(Test, 2),
+                          hypothesis = c(rep("H1", length(Lab1)),
+                                         rep("H0", length(Lab0))),
+                          label = c(Lab1, Lab0))
+    DF.text$test <- factor(DF.text$test, levels = methods[methods %in% selected])
     if(hex){
       gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10() + 
@@ -65,15 +137,10 @@ volcano.sim.power.ttest <- function(x, alpha = 1, shape = 19,
         facet_grid(hypothesis ~ test, scales = "free_y")
     }
   }else{
-    Lab <- round(c(sum(x$Classical$H1$pvalue < sig.level)/nrow(x$Classical$H1),
-                   sum(x$Welch$H1$pvalue < sig.level)/nrow(x$Welch$H1),
-                   sum(x$Hsu$H1$pvalue < sig.level)/nrow(x$Hsu$H1)), 4)
-    Lab <- paste("emp. power:", Lab)
-    DF.text <- data.frame(test = c("Classical two-sample t-test",
-                                   "Welch two-sample t-test",
-                                   "Hsu two-sample t-test"),
-                          hypothesis = rep("H1", 3),
-                          label = Lab)
+    DF.text <- data.frame(test = Test,
+                          hypothesis = rep("H1", length(Lab1)),
+                          label = Lab1)
+    DF.text$test <- factor(DF.text$test, levels = methods[methods %in% selected])
     if(hex){
       gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
         geom_hex(bins = bins) + scale_y_neglog10()+
