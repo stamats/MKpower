@@ -26,6 +26,8 @@
   permutation t tests (two-sample test only balanced designs)
 - added function sim.ssize.boot.t.test to determine sample size for 
   bootstrap t tests (two-sample test only balanced designs)
+- added functions sim.power.xiao.t.test and sim.ssize.xiao.t.test to determine 
+  power and sample size for Xiao t tests
 
 
 ###########################################################

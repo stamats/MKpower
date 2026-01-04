@@ -15,10 +15,11 @@ vignette: >
 
 ## Introduction
 The package includes functions for power analysis and sample size calculation 
-for Welch and Hsu [@Hedderich2018] t tests including Monte-Carlo simulations 
-of empirical power and type-I-error. In addition, power and sample size calculation 
-for Wilcoxon rank sum and signed rank tests via Monte-Carlo simulations can 
-be performed. Moreover, power and sample size required for the evaluation of a 
+for Welch, Hsu [@Hedderich2018] and Xiao [@Xiao2018] as well as permutation [@Janssen1997] 
+and bootstrap [@Davison1997] t tests including Monte-Carlo simulations of empirical power and 
+type-I-error. In addition, power and sample size calculation for Wilcoxon rank sum 
+and signed rank tests via Monte-Carlo simulations can be performed. Moreover, 
+power and sample size required for the evaluation of a 
 diagnostic test(-system) [@Flahault2005; @Dobbin2007] as well as for a single 
 proportion [@Fleiss2003], comparing two negative binomial rates [@Zhu2014], 
 ANCOVA [@Shieh2020], reference ranges [@Jennen2005], and multiple primary 
@@ -92,6 +93,17 @@ power.hsu.t.test2(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 44+59 = 103
 power.hsu.t.test2(n = c(44, 59), delta = 0.5, sd1 = 0.5, sd2 = 1)
 ssize.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 39+62 = 101
 power.hsu.t.test2(n = c(39, 62), delta = 0.5, sd1 = 0.5, sd2 = 1)
+```
+
+
+## Xiao Two-Sample t-Test
+The (optimal) sample sizes can be determined via Monte-Carlo simulations where
+the starting point is the (optimal) sample sizes of the Welch t-test.
+Since the computation time is quite high, we don't run the 
+following code.
+
+```{r, eval=FALSE}
+sim.ssize.xiao.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 35+59 = 94
 ```
 
 
