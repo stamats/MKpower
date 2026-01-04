@@ -15,7 +15,6 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
     stop("'sig.level' has to be of length 1 (type I error)")
   if(sig.level <= 0 | sig.level >= 1)
     stop("'sig.level' has to be in (0, 1)")
-  stopifnot(is.function(rx), is.function(ry))
   stopifnot(is.numeric(nx), length(nx) == 1, nx >= 1)
   nx <- trunc(nx)
   stopifnot(is.numeric(ny), length(ny) == 1, ny >= 1)
@@ -36,10 +35,12 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
   
   ## generate the data
   if(SIM.POW){
+    stopifnot(is.function(rx), is.function(ry))
     data.x <- matrix(rx(nx*iter), nrow = iter)
     data.y <- matrix(ry(ny*iter), nrow = iter)
   }
   if(SIM.ALPHA){
+    stopifnot(is.function(rx.H0), is.function(ry.H0))
     data.x.H0 <- matrix(rx.H0(nx*iter), nrow = iter)
     data.y.H0 <- matrix(ry.H0(ny*iter), nrow = iter)
   }
