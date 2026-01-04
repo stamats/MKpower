@@ -1,13 +1,13 @@
-\name{sim.ssize.perm.t.test}
-\alias{sim.ssize.perm.t.test}
-\title{Sample Size for Permutation t Tests}
+\name{sim.ssize.boot.t.test}
+\alias{sim.ssize.boot.t.test}
+\title{Sample Size for Bootstrap t Tests}
 \usage{
-sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
+sim.ssize.boot.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8, 
                       type = c("two.sample", "one.sample", "paired"), 
                       alternative = c("two.sided", "less", "greater"),
                       var.equal = FALSE, R = 9999, symmetric = TRUE,
-                      useCombn = FALSE, n.min = 10, n.max = 200, 
-                      step.size = 10, iter = 10000, BREAK = TRUE,
+                      n.min = 10, n.max = 200, step.size = 10, 
+                      iter = 10000, BREAK = TRUE,
                       parallel = FALSE, cl = NULL)
 }
 \arguments{
@@ -26,8 +26,6 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
  \item{symmetric}{a logical variable indicating whether to assume symmetry
   in the two-sided test. If \code{TRUE} then the symmetric permutation p value 
   otherwise the equal-tail permutation p value is computed.}
- \item{useCombn}{ logical; use all combinations instead of permutations in the
-  case of the two-sample t-test; see \code{\link[MKinfer]{perm.t.test}}. }
  \item{n.min}{ integer, start value of grid search.}
  \item{n.max}{ integer, stop value of grid search.}
  \item{step.size}{ integer, step size used in the grid search.}
@@ -41,7 +39,7 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   using the maximum number of available cores - 1.}
 }
 \description{
-  Simulate the empirical power of permutation t tests for computing the required 
+  Simulate the empirical power of bootstrap t tests for computing the required 
   sample size.
 }
 
@@ -65,21 +63,14 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   B. Efron, R.J. Tibshirani. \emph{An Introduction to the Bootstrap}.
   Chapman and Hall/CRC 1993.
   
-  A. Janssen (1997). Studentized permutation tests for non-i.i.d, hypotheses 
-  and the generalized Behrens-Fisher problem. 
-  \emph{Statistics and Probability Letters}, \bold{36}, 9-21.
-  
   A. Janssen, T. Pauls. How do bootstrap and permutation tests work?. 
   \emph{Ann. Statist.}, \bold{31}(3), 768-806.
-  
-  E. Chung, J.P. Romano (2013). Exact and asymptotically robust permutation
-  tests. \emph{The Annals of Statistics}, \bold{41}(2), 484-507.
 }
 
 \author{Matthias Kohl \email{Matthias.Kohl@stamats.de}}
 
 %\note{}
-\seealso{\code{\link[MKinfer]{perm.t.test}}}
+\seealso{\code{\link[MKinfer]{boot.t.test}}}
 
 \examples{
  \dontrun{
@@ -89,11 +80,11 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   ###############################################################################
   rx <- function(n) rnorm(n, mean = 0, sd = 1) 
   ry <- function(n) rnorm(n, mean = 0.5, sd = 1) 
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
                         var.equal = TRUE)
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
                         var.equal = TRUE, parallel = TRUE)
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 60, n.max = 65, step.size = 1, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 60, n.max = 65, step.size = 1, 
                         iter = 1000, BREAK = FALSE, var.equal = TRUE,
                         parallel = TRUE)
   ## compared to
@@ -101,24 +92,24 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   
   rx <- function(n) rnorm(n, mean = 0, sd = 1) 
   ry <- function(n) rnorm(n, mean = 0.5, sd = 1.5) 
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.max = 100, iter = 1000, alternative = "less")
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 85, n.max = 90, step.size = 1, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.max = 100, iter = 1000, alternative = "less")
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 85, n.max = 90, step.size = 1, 
                         iter = 1000, BREAK = FALSE, alternative = "less")
   ## compared to
   power.welch.t.test(delta = 0.5, sd = 1, sd2 = 1.5, power = 0.8, alternative = "one.sided")
   
   rx <- function(n) rnorm(n, mean = 0.5, sd = 1)
   ry <- function(n) rnorm(n, mean = 0, sd = 1)
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.max = 100, iter = 1000, alternative = "greater")
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 50, n.max = 55, step.size = 1, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.max = 100, iter = 1000, alternative = "greater")
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 50, n.max = 55, step.size = 1, 
                         iter = 1000, BREAK = FALSE, alternative = "greater")
   ## compared to
   power.t.test(delta = 0.5, power = 0.8, alternative = "one.sided")
   
   rx <- function(n) rgamma(n, scale = 10, shape = 1)
   ry <- function(n) rgamma(n, scale = 15, shape = 1)
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.max = 200, iter = 1000)
-  sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 125, n.max = 135, step.size = 1, 
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.max = 200, iter = 1000)
+  sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 125, n.max = 135, step.size = 1, 
                         iter = 1000, BREAK = FALSE)
   
   ###############################################################################
@@ -126,29 +117,29 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   ## iter = 1000 to reduce computation time
   ###############################################################################
   rx <- function(n) rnorm(n, mean = 0.5, sd = 1)
-  sim.ssize.perm.t.test(rx = rx, mu = 0, type = "one.sample", n.max = 100, iter = 1000)
-  sim.ssize.perm.t.test(rx = rx, mu = 0, type = "one.sample", n.min = 33, n.max = 38, 
+  sim.ssize.boot.t.test(rx = rx, mu = 0, type = "one.sample", n.max = 100, iter = 1000)
+  sim.ssize.boot.t.test(rx = rx, mu = 0, type = "one.sample", n.min = 33, n.max = 38, 
                         step.size = 1, iter = 1000, BREAK = FALSE)
   ## compared to
   power.t.test(delta = 0.5, power = 0.8, type = "one.sample")
   
-  sim.ssize.perm.t.test(rx = rx, mu = 0, type = "one.sample", n.max = 100, iter = 1000,
+  sim.ssize.boot.t.test(rx = rx, mu = 0, type = "one.sample", n.max = 100, iter = 1000,
                         alternative = "greater")
-  sim.ssize.perm.t.test(rx = rx, mu = 0, type = "one.sample", n.min = 25, n.max = 30, 
+  sim.ssize.boot.t.test(rx = rx, mu = 0, type = "one.sample", n.min = 25, n.max = 30, 
                         step.size = 1, iter = 1000, BREAK = FALSE, alternative = "greater")
   ## compared to
   power.t.test(delta = 0.5, power = 0.8, type = "one.sample", alternative = "one.sided")
   
-  sim.ssize.perm.t.test(rx = rx, mu = 1, type = "one.sample", n.max = 100, iter = 1000,
+  sim.ssize.boot.t.test(rx = rx, mu = 1, type = "one.sample", n.max = 100, iter = 1000,
                         alternative = "less")
-  sim.ssize.perm.t.test(rx = rx, mu = 1, type = "one.sample", n.min = 20, n.max = 30, 
+  sim.ssize.boot.t.test(rx = rx, mu = 1, type = "one.sample", n.min = 20, n.max = 30, 
                         step.size = 1, iter = 1000, BREAK = FALSE, alternative = "less")
   ## compared to
   power.t.test(delta = 0.5, power = 0.8, type = "one.sample", alternative = "one.sided")
   
   rx <- function(n) rgamma(n, scale = 10, shape = 1)
-  sim.ssize.perm.t.test(rx = rx, mu = 5, type = "one.sample", n.max = 200, iter = 1000)
-  sim.ssize.perm.t.test(rx = rx, mu = 5, type = "one.sample", n.min = 40, n.max = 50, 
+  sim.ssize.boot.t.test(rx = rx, mu = 5, type = "one.sample", n.max = 200, iter = 1000)
+  sim.ssize.boot.t.test(rx = rx, mu = 5, type = "one.sample", n.min = 40, n.max = 50, 
                         step.size = 1, iter = 1000, BREAK = FALSE)
   
   ###############################################################################
@@ -158,9 +149,9 @@ sim.ssize.perm.t.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
   ## iter = 1000 to reduce computation time
   ###############################################################################
   rxy <- function(n) rnorm(n, mean = 0.5, sd = 1)
-  sim.ssize.perm.t.test(rx = rxy, mu = 0, type = "paired", n.max = 100, 
+  sim.ssize.boot.t.test(rx = rxy, mu = 0, type = "paired", n.max = 100, 
                         iter = 1000)
-  sim.ssize.perm.t.test(rx = rxy, mu = 0, type = "paired", n.min = 33, 
+  sim.ssize.boot.t.test(rx = rxy, mu = 0, type = "paired", n.min = 33, 
                         n.max = 38, step.size = 1, iter = 1000, BREAK = FALSE)
   ## compared to
   power.t.test(delta = 0.5, power = 0.8, type = "paired")

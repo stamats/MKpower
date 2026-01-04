@@ -50,7 +50,7 @@ power.hsu.t.test2 <- function (n = NULL, delta = NULL, sd1 = 1, sd2 = 1,
     sig.level <- uniroot(function(sig.level) eval(p.body) -
                            power, c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
   else stop("internal error", domain = NA)
-  NOTE <- "unequal sample sizes per group (allowed)"
+  NOTE <- "unequal sample sizes per groups (allowed)"
   METHOD <- "Two-sample Hsu t test power calculation"
   structure(list(n1 = n[1], n2 = n[2], delta = delta, sd1 = sd1, sd2 = sd2, 
                  sig.level = sig.level, power = power, alternative = alternative, 
