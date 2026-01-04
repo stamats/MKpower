@@ -3,7 +3,7 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
                              alternative = c("two.sided", "less", "greater"), 
                              methods = c("student", "welch", "hsu", "xiao"), 
                              iter = 10000, R = 9999, useCombn = FALSE, 
-                             parallel = TRUE, cl = NULL){
+                             parallel = FALSE, cl = NULL){
   if(is.null(rx) && is.null(rx.H0) && is.null(ry) && is.null(ry.H0))
     stop("No functions for random number generation provided.")
   if((is.null(rx) && !is.null(ry)) || (!is.null(rx) && is.null(ry)))
