@@ -81,13 +81,17 @@ For computing the sample size of the Hsu t-test [@Hedderich2018], we only consid
 the situation of equal group sizes (balanced design).
 ```{r}
 ## slightly more conservative than Welch t-test
+power.t.test(n = 20, delta = 1)
 power.hsu.t.test(n = 20, delta = 1)
 power.hsu.t.test(power = .90, delta = 1)
 power.hsu.t.test(power = .90, delta = 1, alternative = "one.sided")
 
 ## sd1 = 0.5, sd2 = 1
-power.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
 power.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
+power.hsu.t.test2(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 44+59 = 103
+power.hsu.t.test2(n = c(44, 59), delta = 0.5, sd1 = 0.5, sd2 = 1)
+ssize.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9) # 39+62 = 101
+power.hsu.t.test2(n = c(39, 62), delta = 0.5, sd1 = 0.5, sd2 = 1)
 ```
 
 
