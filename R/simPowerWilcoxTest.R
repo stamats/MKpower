@@ -1,14 +1,19 @@
-sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
+sim.power.wilcox.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL, 
                                   alternative = c("two.sided", "less", "greater"), 
                                   sig.level = 0.05, conf.int = FALSE, approximate = FALSE,
                                   ties = FALSE, iter = 10000, nresample = 10000,
                                   parallel = "no", ncpus = 1L, cl = NULL){
+  if(is.null(rx) && is.null(rx.H0) && is.null(ry) && is.null(ry.H0))
+    stop("No functions for random number generation provided.")
+  if((is.null(rx) && !is.null(ry)) || (!is.null(rx) && is.null(ry)))
+    stop("'rx' or 'ry' is missing.")
+  if((is.null(rx.H0) && !is.null(ry.H0)) || (!is.null(rx.H0) && is.null(ry.H0)))
+    stop("'rx.H0' or 'ry.H0' is missing.")
   alternative <- match.arg(alternative)
   if(length(sig.level) != 1)
     stop("'sig.level' has to be of length 1 (type I error)")
   if(sig.level <= 0 | sig.level >= 1)
     stop("'sig.level' has to be in (0, 1)")
-  stopifnot(is.function(rx), is.function(ry))
   stopifnot(is.numeric(nx), length(nx) == 1, nx >= 1)
   nx <- trunc(nx)
   stopifnot(is.numeric(ny), length(ny) == 1, ny >= 1)
@@ -19,12 +24,22 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   
   conf.level <- 1 - sig.level
   alpha <- sig.level
-  data.x <- matrix(rx(nx*iter), nrow = iter)
-  data.y <- matrix(ry(ny*iter), nrow = iter)
-  if(!is.null(rx.H0) & !is.null(ry.H0)){
+  
+  SIM.POW <- ifelse(!is.null(rx), TRUE, FALSE)
+  SIM.ALPHA <- ifelse(!is.null(rx.H0), TRUE, FALSE)
+  
+  ## generate the data
+  if(SIM.POW){
+    stopifnot(is.function(rx), is.function(ry))
+    data.x <- matrix(rx(nx*iter), nrow = iter)
+    data.y <- matrix(ry(ny*iter), nrow = iter)
+  }
+  if(SIM.ALPHA){
+    stopifnot(is.function(rx.H0), is.function(ry.H0))
     data.x.H0 <- matrix(rx.H0(nx*iter), nrow = iter)
     data.y.H0 <- matrix(ry.H0(ny*iter), nrow = iter)
   }
+  
   wfun <- function(d, nx, ny, alternative, conf.level, distribution, conf.int = TRUE){
     group <- factor(c(rep(1, nx), rep(2, ny)))
     DF <- data.frame(x = d, group = group)
@@ -48,21 +63,26 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
              "loc.null" = loc.null, "conf.level" = conf.level)
     res
   }
+  
+  #########################################################
   ## exact
-  data.xy <- cbind(data.x, data.y)
-  if(conf.int){
-    res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
-                              conf.level, "exact")))
-  }else{
-    if(ties){
+  #########################################################
+  if(SIM.POW){
+    data.xy <- cbind(data.x, data.y)
+    if(conf.int){
       res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
-                                conf.level, "exact", conf.int = FALSE)))
+                                conf.level, "exact")))
     }else{
-      res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
-                                    exact = TRUE)
+      if(ties){
+        res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
+                                  conf.level, "exact", conf.int = FALSE)))
+      }else{
+        res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
+                                      exact = TRUE)
+      }
     }
   }
-  if(!is.null(rx.H0) & !is.null(ry.H0)){
+  if(SIM.ALPHA){
     data.xy.H0 <- cbind(data.x.H0, data.y.H0)
     if(conf.int){
       res.H0 <- data.frame(t(apply(data.xy.H0, 1, wfun, nx, ny, alternative, 
@@ -77,19 +97,24 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
       }
       
     }
-    EXACT <- list("H1" = res, "H0" = res.H0)
-  }else{
-    EXACT <- list("H1" = res)  
   }
+  if(SIM.POW && SIM.ALPHA) EXACT <- list("H1" = res, "H0" = res.H0)
+  if(SIM.POW && !SIM.ALPHA) EXACT <- list("H1" = res)
+  if(!SIM.POW && SIM.ALPHA) EXACT <- list("H0" = res.H0)
+  
+  #########################################################
   ## asymptotic
-  if(conf.int){
-    res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
-                              conf.level, "asymptotic")))
-  }else{
-    res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
-                                  exact = FALSE)
+  #########################################################
+  if(SIM.POW){
+    if(conf.int){
+      res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, 
+                                conf.level, "asymptotic")))
+    }else{
+      res <- row_wilcoxon_twosample(data.x, data.y, alternative, null = 0, 
+                                    exact = FALSE)
+    }
   }
-  if(!is.null(rx.H0) & !is.null(ry.H0)){
+  if(SIM.ALPHA){
     if(conf.int){
       res.H0 <- data.frame(t(apply(data.xy.H0, 1, wfun, nx, ny, alternative, 
                                    conf.level, "asymptotic")))
@@ -97,21 +122,26 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
       res.H0 <- row_wilcoxon_twosample(data.x.H0, data.y.H0, alternative, 
                                        null = 0, exact = FALSE)
     }
-    ASYMPTOTIC <- list("H1" = res, "H0" = res.H0)
-  }else{
-    ASYMPTOTIC <- list("H1" = res)  
   }
+  if(SIM.POW && SIM.ALPHA) ASYMPTOTIC <- list("H1" = res, "H0" = res.H0)
+  if(SIM.POW && !SIM.ALPHA) ASYMPTOTIC <- list("H1" = res)
+  if(!SIM.POW && SIM.ALPHA) ASYMPTOTIC <- list("H0" = res.H0)
+  
+  #########################################################
   ## approximate
+  #########################################################
   if(approximate){
-    if(conf.int){
-      res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, conf.level, 
-                                approximate(nresample, parallel, ncpus, cl))))
-    }else{
-      res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, conf.level, 
-                                approximate(nresample, parallel, ncpus, cl), 
-                                conf.int = FALSE)))
+    if(SIM.POW){
+      if(conf.int){
+        res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, conf.level, 
+                                  approximate(nresample, parallel, ncpus, cl))))
+      }else{
+        res <- data.frame(t(apply(data.xy, 1, wfun, nx, ny, alternative, conf.level, 
+                                  approximate(nresample, parallel, ncpus, cl), 
+                                  conf.int = FALSE)))
+      }
     }
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if(conf.int){
         res.H0 <- data.frame(t(apply(data.xy.H0, 1, wfun, nx, ny, alternative, 
                                      conf.level, 
@@ -122,11 +152,12 @@ sim.power.wilcox.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                                      approximate(nresample, parallel, ncpus, cl),
                                      conf.int = FALSE)))
       }
-      APPROXIMATE <- list("H1" = res, "H0" = res.H0)
-    }else{
-      APPROXIMATE <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) APPROXIMATE <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) APPROXIMATE <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) APPROXIMATE <- list("H0" = res.H0)
   }
+  
   ## Set-up
   SetUp <- c("nx" = nx, "rx" = rx, "rx.H0" = rx.H0, 
              "ny" = ny, "ry" = ry, "ry.H0" = ry.H0, 
@@ -153,14 +184,20 @@ print.sim.power.wtest <- function(x, digits = getOption("digits"), ...){
   cat(paste(format(names(y0), width = 15L, justify = "right"), 
             format(y0, digits = digits), sep = " = "), sep = "\n")
   cat("\n    Exact Wilcoxon-Mann-Whitney Test\n")
-  y1 <- c("emp.power" = sum(x$Exact$H1$pvalue < alpha)/iter)
+  y1 <- NULL
+  if(!is.null(x$Exact$H1)){
+    y1 <- c("emp.power" = sum(x$Exact$H1$pvalue < alpha)/iter)
+  }
   if(!is.null(x$Exact$H0)){
     y1 <- c(y1, "emp.type.I.error" = sum(x$Exact$H0$pvalue < alpha)/iter)
   }
   cat(paste(format(names(y1), width = 15L, justify = "right"), 
             format(y1, digits = digits), sep = " = "), sep = "\n")
   cat("\n    Asymptotic Wilcoxon-Mann-Whitney Test\n")
-  y2 <- c("emp.power" = sum(x$Asymptotic$H1$pvalue < alpha)/iter)
+  y2 <- NULL
+  if(!is.null(x$Asymptotic$H1)){
+    y2 <- c("emp.power" = sum(x$Asymptotic$H1$pvalue < alpha)/iter)
+  }
   if(!is.null(x$Asymptotic$H0)){
     y2 <- c(y2, "emp.type.I.error" = sum(x$Asymptotic$H0$pvalue < alpha)/iter)
   }
@@ -168,7 +205,10 @@ print.sim.power.wtest <- function(x, digits = getOption("digits"), ...){
             format(y2, digits = digits), sep = " = "), sep = "\n")
   if(x$SetUp$approximate){
     cat("\n    Approximate Wilcoxon-Mann-Whitney Test\n")
-    y3 <- c("emp.power" = sum(x$Approximate$H1$pvalue < alpha)/iter)
+    y3 <- NULL
+    if(!is.null(x$Approximate$H1)){
+      y3 <- c("emp.power" = sum(x$Approximate$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Approximate$H0)){
       y3 <- c(y3, "emp.type.I.error" = sum(x$Approximate$H0$pvalue < alpha)/iter)
     }

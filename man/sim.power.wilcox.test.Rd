@@ -5,7 +5,7 @@
   Simulate the empirical power and type-I-error of Wilcoxon-Mann-Whitney tests.
 }
 \usage{
-sim.power.wilcox.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
+sim.power.wilcox.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL, 
                       alternative = c("two.sided", "less", "greater"), 
                       sig.level = 0.05, conf.int = FALSE, approximate = FALSE,
                       ties = FALSE, iter = 10000, nresample = 10000,
@@ -38,9 +38,12 @@ sim.power.wilcox.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
  \code{\link[coin]{NullDistribution}}.}
 }
 \details{
-  Functions \code{rx} and \code{ry} are used to simulate the data under the
+  If specified, functions \code{rx} and \code{ry} are used to simulate the data under the
   alternative hypothesis H1. If specified, functions \code{rx.H0} and \code{ry.H0}
   simulte the data unter the null hypothesis H0.
+  
+  At least one pair of functions has to be provided, either \code{rx} and \code{ry}
+  or \code{rx.H0} and \code{ry.H0}.
   
   For fast computations functions from package \code{matrixTests} and package
   \code{coin} are used.
@@ -70,5 +73,11 @@ sim.ssize.wilcox.test(rx = rnorm, ry = function(x) rnorm(x, mean = 2),
 sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
                       ry.H0 = rnorm)
+## only power
+sim.power.wilcox.test(nx = 6, rx = rnorm, 
+                      ny = 6, ry = function(x) rnorm(x, mean = 2))
+## only type I error
+sim.power.wilcox.test(nx = 6, rx.H0 = rnorm, 
+                      ny = 6, ry.H0 = rnorm)
 }
 \keyword{htest}
