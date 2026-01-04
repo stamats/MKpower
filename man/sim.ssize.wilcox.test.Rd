@@ -25,7 +25,7 @@ sim.ssize.wilcox.test(rx, ry = NULL, mu = 0, sig.level = 0.05, power = 0.8,
  \item{exact}{ logical or NA (default) indicator whether an exact p-value should 
  be computed (see Details at \code{\link[matrixTests]{wilcoxon}}). A single 
  value or a logical vector with values for each observation.}
- \item{correct}{ogical indicator whether continuity correction should be applied 
+ \item{correct}{ logical indicator whether continuity correction should be applied 
  in the cases where p-values are obtained using normal approximation. A single 
  value or logical vector with values for each observation; see 
  \code{\link[matrixTests]{wilcoxon}}.}
