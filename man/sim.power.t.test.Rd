@@ -11,7 +11,7 @@ sim.power.t.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL,
                  alternative = c("two.sided", "less", "greater"), 
                  methods = c("student", "welch", "hsu", "xiao"),
                  iter = 10000, R = 9999, useCombn = FALSE, 
-                 parallel = TRUE, cl = NULL)
+                 parallel = FALSE, cl = NULL)
 }
 \arguments{
  \item{nx}{ single numeric, sample size of first group.}
@@ -33,7 +33,8 @@ sim.power.t.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL,
  \item{useCombn}{logical; use all combinations instead of permutations in the
     case of the two-sample t-test; see \code{\link[MKinfer:perm.t.test]{perm.t.test}}.}
   \item{parallel}{logical; use parellel computing via function \code{\link{parRapply}}
-    in the case of method \code{"xiao"}.}
+    in the case of method \code{"xiao"} as well as in the case of permutation and 
+    bootstrap tests.}
   \item{cl}{a cluster object, created by package \code{\link[parallel:makeCluster]{parallel}} 
     or by package \code{\link[snow:makeCluster]{snow}}. If \code{NULL}, a new cluster 
     will be generated with function \code{\link[parallel:makeCluster]{makeCluster}} 
@@ -107,11 +108,15 @@ sim.power.t.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL,
                    ry.H0 = function(n) rnorm(n, sd = 3), 
                    methods = c("student", "welch"))
   \dontrun{
-    ## with parallel computing in case of xiao
+    ## with parallel computing in case of xiao as well as perm. and boot. tests
     sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
                      ny = 10, ry = function(n) rnorm(n, mean = 3, sd = 3), 
                      ry.H0 = function(n) rnorm(n, sd = 3), 
-                     methods = c("student", "welch", "hsu", "xiao"))
+                     iter = 1000,
+                     methods = c("student", "welch", "hsu", "xiao",
+                                 "perm.student", "perm.welch", 
+                                 "boot.student", "boot.welch"),
+                     parallel = TRUE)
   }
 }
 \keyword{htest}
