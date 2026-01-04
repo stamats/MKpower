@@ -1,9 +1,15 @@
-sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
+sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL, 
                              sig.level = 0.05, conf.int = FALSE, mu = 0, 
                              alternative = c("two.sided", "less", "greater"), 
                              methods = c("student", "welch", "hsu", "xiao"), 
                              iter = 10000, R = 9999, useCombn = FALSE, 
                              parallel = TRUE, cl = NULL){
+  if(is.null(rx) && is.null(rx.H0) && is.null(ry) && is.null(ry.H0))
+    stop("No functions for random number generation provided.")
+  if((is.null(rx) && !is.null(ry)) || (!is.null(rx) && is.null(ry)))
+    stop("'rx' or 'ry' is missing.")
+  if((is.null(rx.H0) && !is.null(ry.H0)) || (!is.null(rx.H0) && is.null(ry.H0)))
+    stop("'rx.H0' or 'ry.H0' is missing.")
   alternative <- match.arg(alternative)
   if(length(sig.level) != 1)
     stop("'sig.level' has to be of length 1 (type I error)")
@@ -25,10 +31,15 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
     conf.level <- NA
   }
   
+  SIM.POW <- ifelse(!is.null(rx), TRUE, FALSE)
+  SIM.ALPHA <- ifelse(!is.null(rx.H0), TRUE, FALSE)
+  
   ## generate the data
-  data.x <- matrix(rx(nx*iter), nrow = iter)
-  data.y <- matrix(ry(ny*iter), nrow = iter)
-  if(!is.null(rx.H0) & !is.null(ry.H0)){
+  if(SIM.POW){
+    data.x <- matrix(rx(nx*iter), nrow = iter)
+    data.y <- matrix(ry(ny*iter), nrow = iter)
+  }
+  if(SIM.ALPHA){
     data.x.H0 <- matrix(rx.H0(nx*iter), nrow = iter)
     data.y.H0 <- matrix(ry.H0(ny*iter), nrow = iter)
   }
@@ -58,17 +69,19 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Student 2-sample t-test
   #########################################################
   if("student" %in% methods){
-    res <- row_t_equalvar(data.x, data.y, 
-                          alternative = alternative, null = mu, 
-                          conf.level = conf.level)
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.POW){
+      res <- row_t_equalvar(data.x, data.y, 
+                            alternative = alternative, null = mu, 
+                            conf.level = conf.level)
+    }
+    if(SIM.ALPHA){
       res.H0 <- row_t_equalvar(data.x.H0, data.y.H0, 
                                alternative = alternative, 
                                null = mu, conf.level = conf.level)
-      STUDENT <- list("H1" = res, "H0" = res.H0)
-    }else{
-      STUDENT <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) STUDENT <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) STUDENT <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) STUDENT <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Student = STUDENT))
   }
   
@@ -76,17 +89,19 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Welch 2-sample t-test
   #########################################################
   if("welch" %in% methods){
-    res <- row_t_welch(data.x, data.y, 
-                       alternative = alternative, null = mu, 
-                       conf.level = conf.level)
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.POW){
+      res <- row_t_welch(data.x, data.y, 
+                         alternative = alternative, null = mu, 
+                         conf.level = conf.level)
+    }
+    if(SIM.ALPHA){
       res.H0 <- row_t_welch(data.x.H0, data.y.H0, 
                             alternative = alternative, 
                             null = mu, conf.level = conf.level)
-      WELCH <- list("H1" = res, "H0" = res.H0)
-    }else{
-      WELCH <- list("H1" = res)
     }
+    if(SIM.POW && SIM.ALPHA) WELCH <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) WELCH <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) WELCH <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Welch = WELCH))
   }
   
@@ -94,35 +109,37 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Hsu 2-sample t-test
   #########################################################
   if("hsu" %in% methods){
-    df <- min(nx, ny) - 1
-    if("welch" %in% methods){
-      res <- WELCH$H1 
-    }else{
-      res <- row_t_welch(data.x, data.y, 
-                         alternative = alternative, null = mu, 
-                         conf.level = conf.level)
-    }
-    res$df <- df
-    if(alternative == "less"){
-      res$pvalue <- pt(res$statistic, df = df)
-      if(conf.int){
-        res$conf.high <- mu + (res$statistic + qt(conf.level, df = df))*res$stderr
+    if(SIM.POW){
+      df <- min(nx, ny) - 1
+      if("welch" %in% methods){
+        res <- WELCH$H1 
+      }else{
+        res <- row_t_welch(data.x, data.y, 
+                           alternative = alternative, null = mu, 
+                           conf.level = conf.level)
       }
-    }else if(alternative == "greater") {
-      res$pvalue <- pt(res$statistic, df = df, lower.tail = FALSE)
-      if(conf.int){
-        res$conf.low <- mu + (res$statistic - qt(conf.level, df = df))*res$stderr
+      res$df <- df
+      if(alternative == "less"){
+        res$pvalue <- pt(res$statistic, df = df)
+        if(conf.int){
+          res$conf.high <- mu + (res$statistic + qt(conf.level, df = df))*res$stderr
+        }
+      }else if(alternative == "greater") {
+        res$pvalue <- pt(res$statistic, df = df, lower.tail = FALSE)
+        if(conf.int){
+          res$conf.low <- mu + (res$statistic - qt(conf.level, df = df))*res$stderr
+        }
+      }
+      else{
+        res$pvalue <- 2 * pt(-abs(res$statistic), df = df)
+        if(conf.int){
+          crit <- qt(1 - alpha/2, df)
+          res$conf.low <- mu + (res$statistic - crit)*res$stderr
+          res$conf.high <- mu + (res$statistic + crit)*res$stderr
+        }
       }
     }
-    else{
-      res$pvalue <- 2 * pt(-abs(res$statistic), df = df)
-      if(conf.int){
-        crit <- qt(1 - alpha/2, df)
-        res$conf.low <- mu + (res$statistic - crit)*res$stderr
-        res$conf.high <- mu + (res$statistic + crit)*res$stderr
-      }
-    }
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if("welch" %in% methods){
         res.H0 <- WELCH$H0
       }else{
@@ -150,10 +167,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
           res.H0$conf.high <- mu + (res.H0$statistic + crit)*res.H0$stderr
         }
       }
-      HSU <- list("H1" = res, "H0" = res.H0)
-    }else{
-      HSU <- list("H1" = res)
     }
+    if(SIM.POW && SIM.ALPHA) HSU <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) HSU <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) HSU <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Hsu = HSU))
   }
   
@@ -161,53 +178,55 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Xiao two-sample t-test
   #########################################################
   if("xiao" %in% methods){
-    if("welch" %in% methods || "hsu" %in% methods){
-      if("welch" %in% methods){
-        res <- WELCH$H1
+    if(SIM.POW){
+      if("welch" %in% methods || "hsu" %in% methods){
+        if("welch" %in% methods){
+          res <- WELCH$H1
+        }else{
+          res <- HSU$H1
+        }
       }else{
-        res <- HSU$H1
+        res <- row_t_welch(data.x, data.y, 
+                           alternative = alternative, null = mu, 
+                           conf.level = conf.level)
       }
-    }else{
-      res <- row_t_welch(data.x, data.y, 
-                         alternative = alternative, null = mu, 
-                         conf.level = conf.level)
-    }
-    
-    vx <- res$var.x
-    vy <- res$var.y
-    df <- ifelse(nx*(nx-1)/vx <= ny*(ny-1)/vy, 
-                 (ny-1)*(1 + ny/nx*vx/vy), (nx-1)*(1 + nx/ny*vy/vx))
-    res$df <- df
-    if(alternative == "less"){
-      res$pvalue <- pgt(res$statistic, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
-                        parallel = parallel, cl = cl)
-      if(conf.int){
-        res$conf.high <- mu + (res$statistic + qgt(conf.level, n1 = nx, n2 = ny, 
-                                                   v1tov2 = vx/vy, 
-                                                   parallel = parallel, cl = cl))*res$stderr
+      
+      vx <- res$var.x
+      vy <- res$var.y
+      df <- ifelse(nx*(nx-1)/vx <= ny*(ny-1)/vy, 
+                   (ny-1)*(1 + ny/nx*vx/vy), (nx-1)*(1 + nx/ny*vy/vx))
+      res$df <- df
+      if(alternative == "less"){
+        res$pvalue <- pgt(res$statistic, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
+                          parallel = parallel, cl = cl)
+        if(conf.int){
+          res$conf.high <- mu + (res$statistic + qgt(conf.level, n1 = nx, n2 = ny, 
+                                                     v1tov2 = vx/vy, 
+                                                     parallel = parallel, cl = cl))*res$stderr
+        }
+      }else if(alternative == "greater") {
+        res$pvalue <- pgt(res$statistic, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
+                          lower.tail = FALSE, parallel = parallel, 
+                          cl = cl)
+        if(conf.int){
+          res$conf.low <- mu + (res$statistic - qgt(conf.level, n1 = nx, n2 = ny, 
+                                                    v1tov2 = vx/vy, 
+                                                    parallel = parallel, cl = cl))*res$stderr
+        }
       }
-    }else if(alternative == "greater") {
-      res$pvalue <- pgt(res$statistic, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
-                        lower.tail = FALSE, parallel = parallel, 
-                        cl = cl)
-      if(conf.int){
-        res$conf.low <- mu + (res$statistic - qgt(conf.level, n1 = nx, n2 = ny, 
-                                                  v1tov2 = vx/vy, 
-                                                  parallel = parallel, cl = cl))*res$stderr
-      }
-    }
-    else{
-      res$pvalue <- 2 * pgt(-abs(res$statistic), n1 = nx, n2 = ny, 
-                            v1tov2 = vx/vy, 
-                            parallel = parallel, cl = cl)
-      if(conf.int){
-        crit <- qgt(1 - alpha/2, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
-                    parallel = parallel, cl = cl)
-        res$conf.low <- mu + (res$statistic - crit)*res$stderr
-        res$conf.high <- mu + (res$statistic + crit)*res$stderr
+      else{
+        res$pvalue <- 2 * pgt(-abs(res$statistic), n1 = nx, n2 = ny, 
+                              v1tov2 = vx/vy, 
+                              parallel = parallel, cl = cl)
+        if(conf.int){
+          crit <- qgt(1 - alpha/2, n1 = nx, n2 = ny, v1tov2 = vx/vy, 
+                      parallel = parallel, cl = cl)
+          res$conf.low <- mu + (res$statistic - crit)*res$stderr
+          res$conf.high <- mu + (res$statistic + crit)*res$stderr
+        }
       }
     }
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if("welch" %in% methods || "hsu" %in% methods){
         if("welch" %in% methods){
           res.H0 <- WELCH$H0
@@ -256,10 +275,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
           res.H0$conf.high <- mu + (res.H0$statistic + crit)*res.H0$stderr
         }
       }
-      XIAO <- list("H1" = res, "H0" = res.H0)
-    }else{
-      XIAO <- list("H1" = res)
     }
+    if(SIM.POW && SIM.ALPHA) XIAO <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) XIAO <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) XIAO <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Xiao = XIAO))
   }
   
@@ -267,40 +286,42 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Permutation Student 2-sample t-test
   #########################################################
   if("perm.student" %in% methods){
-    if(parallel){
-      row.perm.stud <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
-        tmp <- perm.t.test(x = xy[1:nx], 
-                           y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
-                           conf.level = conf.level, mu = mu, 
-                           alternative = alternative, R = R, 
-                           useCombn = useCombn)
-        res <- c(tmp$statistic, tmp$perm.p.value, 
-                 tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                 tmp$perm.estimate, tmp$perm.stderr)
-        res
+    if(SIM.POW){
+      if(parallel){
+        row.perm.stud <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
+          tmp <- perm.t.test(x = xy[1:nx], 
+                             y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
+                             conf.level = conf.level, mu = mu, 
+                             alternative = alternative, R = R, 
+                             useCombn = useCombn)
+          res <- c(tmp$statistic, tmp$perm.p.value, 
+                   tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                   tmp$perm.estimate, tmp$perm.stderr)
+          res
+        }
+        data.comb <- cbind(data.x, data.y)
+        res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.stud, 
+                         nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
+                         alternative = alternative, R = R, useCombn = useCombn)
+        res <- matrix(res, ncol = 7, byrow = TRUE)
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
+      }else{
+        res <- matrix(NA, nrow = iter, ncol = 7)
+        for(i in 1:iter){
+          tmp <- perm.t.test(x = data.x[i,], y = data.y[i,], var.equal = TRUE, 
+                             conf.level = 1-sig.level, mu = mu, 
+                             alternative = alternative, R = R, useCombn = useCombn)
+          res[i,] <- c(tmp$statistic, tmp$perm.p.value, 
+                       tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                       tmp$perm.estimate, tmp$perm.stderr)
+        }
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
       }
-      data.comb <- cbind(data.x, data.y)
-      res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.stud, 
-                       nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
-                       alternative = alternative, R = R, useCombn = useCombn)
-      res <- matrix(res, ncol = 7, byrow = TRUE)
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                         "conf.high", "mean.diff", "stderr")
-    }else{
-      res <- matrix(NA, nrow = iter, ncol = 7)
-      for(i in 1:iter){
-        tmp <- perm.t.test(x = data.x[i,], y = data.y[i,], var.equal = TRUE, 
-                           conf.level = 1-sig.level, mu = mu, 
-                           alternative = alternative, R = R, useCombn = useCombn)
-        res[i,] <- c(tmp$statistic, tmp$perm.p.value, 
-                     tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                     tmp$perm.estimate, tmp$perm.stderr)
-      }
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                        "conf.high", "mean.diff", "stderr")
+      res <- as.data.frame(res)
     }
-    res <- as.data.frame(res)
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if(parallel){
         data.comb.H0 <- cbind(data.x.H0, data.y.H0)
         res.H0 <- parRapply(cl = cl, x = data.comb.H0, FUN = row.perm.stud, 
@@ -325,10 +346,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                              "conf.high", "mean.diff", "stderr")
       }
       res.H0 <- as.data.frame(res.H0)
-      PERM.STUDENT <- list("H1" = res, "H0" = res.H0)
-    }else{
-      PERM.STUDENT <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) PERM.STUDENT <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) PERM.STUDENT <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) PERM.STUDENT <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Perm.Student = PERM.STUDENT))
   }
   
@@ -336,40 +357,42 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Permutation Welch 2-sample t-test
   #########################################################
   if("perm.welch" %in% methods){
-    if(parallel){
-      row.perm.welch <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
-        tmp <- perm.t.test(x = xy[1:nx], 
-                           y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
-                           conf.level = conf.level, mu = mu, 
-                           alternative = alternative, R = R, 
-                           useCombn = useCombn)
-        res <- c(tmp$statistic, tmp$perm.p.value, 
-                 tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                 tmp$perm.estimate, tmp$perm.stderr)
-        res
+    if(SIM.POW){
+      if(parallel){
+        row.perm.welch <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
+          tmp <- perm.t.test(x = xy[1:nx], 
+                             y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
+                             conf.level = conf.level, mu = mu, 
+                             alternative = alternative, R = R, 
+                             useCombn = useCombn)
+          res <- c(tmp$statistic, tmp$perm.p.value, 
+                   tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                   tmp$perm.estimate, tmp$perm.stderr)
+          res
+        }
+        data.comb <- cbind(data.x, data.y)
+        res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.welch, 
+                         nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
+                         alternative = alternative, R = R, useCombn = useCombn)
+        res <- matrix(res, ncol = 7, byrow = TRUE)
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
+      }else{
+        res <- matrix(NA, nrow = iter, ncol = 7)
+        for(i in 1:iter){
+          tmp <- perm.t.test(x = data.x[i,], y = data.y[i,], var.equal = FALSE, 
+                             conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
+                             alternative = alternative, R = R, useCombn = useCombn)
+          res[i,] <- c(tmp$statistic, tmp$perm.p.value, 
+                       tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                       tmp$perm.estimate, tmp$perm.stderr)
+        }
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
       }
-      data.comb <- cbind(data.x, data.y)
-      res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.welch, 
-                       nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
-                       alternative = alternative, R = R, useCombn = useCombn)
-      res <- matrix(res, ncol = 7, byrow = TRUE)
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                         "conf.high", "mean.diff", "stderr")
-    }else{
-      res <- matrix(NA, nrow = iter, ncol = 7)
-      for(i in 1:iter){
-        tmp <- perm.t.test(x = data.x[i,], y = data.y[i,], var.equal = FALSE, 
-                           conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
-                           alternative = alternative, R = R, useCombn = useCombn)
-        res[i,] <- c(tmp$statistic, tmp$perm.p.value, 
-                     tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                     tmp$perm.estimate, tmp$perm.stderr)
-      }
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                        "conf.high", "mean.diff", "stderr")
+      res <- as.data.frame(res)
     }
-    res <- as.data.frame(res)
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if(parallel){
         data.comb.H0 <- cbind(data.x.H0, data.y.H0)
         res.H0 <- parRapply(cl = cl, x = data.comb.H0, FUN = row.perm.welch, 
@@ -394,10 +417,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                              "conf.high", "mean.diff", "stderr")
       }
       res.H0 <- as.data.frame(res.H0)
-      PERM.WELCH <- list("H1" = res, "H0" = res.H0)
-    }else{
-      PERM.WELCH <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) PERM.WELCH <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) PERM.WELCH <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) PERM.WELCH <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Perm.Welch = PERM.WELCH))
   }
   
@@ -405,39 +428,41 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Bootstrap Student 2-sample t-test
   #########################################################
   if("boot.student" %in% methods){
-    if(parallel){
-      row.boot.stud <- function(xy, nx, ny, conf.level, mu, alternative, R){
-        tmp <- boot.t.test(x = xy[1:nx], 
-                           y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
-                           conf.level = conf.level, mu = mu, 
-                           alternative = alternative, R = R)
-        res <- c(tmp$statistic, tmp$boot.p.value, 
-                 tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                 tmp$boot.estimate, tmp$boot.stderr)
-        res
+    if(SIM.POW){
+      if(parallel){
+        row.boot.stud <- function(xy, nx, ny, conf.level, mu, alternative, R){
+          tmp <- boot.t.test(x = xy[1:nx], 
+                             y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
+                             conf.level = conf.level, mu = mu, 
+                             alternative = alternative, R = R)
+          res <- c(tmp$statistic, tmp$boot.p.value, 
+                   tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                   tmp$boot.estimate, tmp$boot.stderr)
+          res
+        }
+        data.comb <- cbind(data.x, data.y)
+        res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.stud, 
+                         nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
+                         alternative = alternative, R = R)
+        res <- matrix(res, ncol = 7, byrow = TRUE)
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
+      }else{
+        res <- matrix(NA, nrow = iter, ncol = 7)
+        for(i in 1:iter){
+          tmp <- boot.t.test(x = data.x[i,], y = data.y[i,], var.equal = TRUE, 
+                             conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
+                             alternative = alternative, R = R)
+          res[i,] <- c(tmp$statistic, tmp$boot.p.value, 
+                       tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                       tmp$boot.estimate, tmp$boot.stderr)
+        }
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
       }
-      data.comb <- cbind(data.x, data.y)
-      res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.stud, 
-                       nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
-                       alternative = alternative, R = R)
-      res <- matrix(res, ncol = 7, byrow = TRUE)
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                         "conf.high", "mean.diff", "stderr")
-    }else{
-      res <- matrix(NA, nrow = iter, ncol = 7)
-      for(i in 1:iter){
-        tmp <- boot.t.test(x = data.x[i,], y = data.y[i,], var.equal = TRUE, 
-                           conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
-                           alternative = alternative, R = R)
-        res[i,] <- c(tmp$statistic, tmp$boot.p.value, 
-                     tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                     tmp$boot.estimate, tmp$boot.stderr)
-      }
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                        "conf.high", "mean.diff", "stderr")
+      res <- as.data.frame(res)
     }
-    res <- as.data.frame(res)
-    if(!is.null(rx.H0) & !is.null(ry.H0)){
+    if(SIM.ALPHA){
       if(parallel){
         data.comb.H0 <- cbind(data.x.H0, data.y.H0)
         res.H0 <- parRapply(cl = cl, x = data.comb.H0, FUN = row.boot.stud, 
@@ -461,10 +486,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                              "conf.high", "mean.diff", "stderr")
       }
       res.H0 <- as.data.frame(res.H0)
-      BOOT.STUDENT <- list("H1" = res, "H0" = res.H0)
-    }else{
-      BOOT.STUDENT <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) BOOT.STUDENT <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) BOOT.STUDENT <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) BOOT.STUDENT <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Boot.Student = BOOT.STUDENT))
   }
   
@@ -472,38 +497,40 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   ## Bootstrap Welch 2-sample t-test
   #########################################################
   if("boot.welch" %in% methods){
-    if(parallel){
-      row.boot.welch <- function(xy, nx, ny, conf.level, mu, alternative, R){
-        tmp <- boot.t.test(x = xy[1:nx], 
-                           y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
-                           conf.level = conf.level, mu = mu, 
-                           alternative = alternative, R = R)
-        res <- c(tmp$statistic, tmp$boot.p.value, 
-                 tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                 tmp$boot.estimate, tmp$boot.stderr)
-        res
+    if(SIM.POW){
+      if(parallel){
+        row.boot.welch <- function(xy, nx, ny, conf.level, mu, alternative, R){
+          tmp <- boot.t.test(x = xy[1:nx], 
+                             y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
+                             conf.level = conf.level, mu = mu, 
+                             alternative = alternative, R = R)
+          res <- c(tmp$statistic, tmp$boot.p.value, 
+                   tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                   tmp$boot.estimate, tmp$boot.stderr)
+          res
+        }
+        data.comb <- cbind(data.x, data.y)
+        res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.welch, 
+                         nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
+                         alternative = alternative, R = R)
+        res <- matrix(res, ncol = 7, byrow = TRUE)
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
+      }else{
+        res <- matrix(NA, nrow = iter, ncol = 7)
+        for(i in 1:iter){
+          tmp <- boot.t.test(x = data.x[i,], y = data.y[i,], var.equal = FALSE, 
+                             conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
+                             alternative = alternative, R = R)
+          res[i,] <- c(tmp$statistic, tmp$boot.p.value, 
+                       tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                       tmp$boot.estimate, tmp$boot.stderr)
+        }
+        colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
+                           "conf.high", "mean.diff", "stderr")
       }
-      data.comb <- cbind(data.x, data.y)
-      res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.welch, 
-                       nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
-                       alternative = alternative, R = R)
-      res <- matrix(res, ncol = 7, byrow = TRUE)
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                         "conf.high", "mean.diff", "stderr")
-    }else{
-      res <- matrix(NA, nrow = iter, ncol = 7)
-      for(i in 1:iter){
-        tmp <- boot.t.test(x = data.x[i,], y = data.y[i,], var.equal = FALSE, 
-                           conf.level = 1-sig.level, conf.int = conf.int, mu = mu, 
-                           alternative = alternative, R = R)
-        res[i,] <- c(tmp$statistic, tmp$boot.p.value, 
-                     tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                     tmp$boot.estimate, tmp$boot.stderr)
-      }
-      colnames(res) <- c("statistic", "pvalue", "R", "conf.low",
-                        "conf.high", "mean.diff", "stderr")
+      res <- as.data.frame(res)
     }
-    res <- as.data.frame(res)
     if(!is.null(rx.H0) & !is.null(ry.H0)){
       if(parallel){
         data.comb.H0 <- cbind(data.x.H0, data.y.H0)
@@ -528,10 +555,10 @@ sim.power.t.test <- function(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
                              "conf.high", "mean.diff", "stderr")
       }
       res.H0 <- as.data.frame(res.H0)
-      BOOT.WELCH <- list("H1" = res, "H0" = res.H0)
-    }else{
-      BOOT.WELCH <- list("H1" = res)  
     }
+    if(SIM.POW && SIM.ALPHA) BOOT.WELCH <- list("H1" = res, "H0" = res.H0)
+    if(SIM.POW && !SIM.ALPHA) BOOT.WELCH <- list("H1" = res)
+    if(!SIM.POW && SIM.ALPHA) BOOT.WELCH <- list("H0" = res.H0)
     RESULT <- c(RESULT, list(Boot.Welch = BOOT.WELCH))
   }
   if(parallel && PARA){
