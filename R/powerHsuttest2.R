@@ -1,7 +1,8 @@
-power.hsu.t.test <- function (n = NULL, delta = NULL, sd1 = 1, sd2 = 1,
+power.hsu.t.test2 <- function (n = NULL, delta = NULL, sd1 = 1, sd2 = 1,
                               sig.level = 0.05, power = NULL,
                               alternative = c("two.sided", "one.sided"),
-                              strict = FALSE, tol = .Machine$double.eps^0.25) {
+                              strict = FALSE, tol = .Machine$double.eps^0.25, 
+                              abstol = .Machine$double.eps^0.5) {
   if (sum(sapply(list(n, delta, sd1, sd2, power, sig.level), is.null)) != 1)
     stop("exactly one of 'n', 'delta', 'sd1', 'sd2', 'power', and 'sig.level' must be NULL")
   if (!is.null(sig.level) && !is.numeric(sig.level) || any(0 > sig.level | sig.level > 1))
@@ -18,23 +19,23 @@ power.hsu.t.test <- function (n = NULL, delta = NULL, sd1 = 1, sd2 = 1,
     delta <- abs(delta)
   p.body <- if (strict && tside == 2)
     quote({
-      nu <- n - 1
+      nu <- min(n) - 1
       qu <- qt(sig.level/tside, nu, lower.tail = FALSE)
-      sd <- sqrt(sd1^2 + sd2^2)
-      pt(qu, nu, ncp = sqrt(n) * delta/sd, lower.tail = FALSE) +
-        pt(-qu, nu, ncp = sqrt(n) * delta/sd, lower.tail = TRUE)
+      sd <- sqrt(sd1^2/n[1] + sd2^2/n[2])
+      pt(qu, nu, ncp = delta/sd, lower.tail = FALSE) +
+        pt(-qu, nu, ncp = delta/sd, lower.tail = TRUE)
     })
   else quote({
-    nu <- n - 1
-    sd <- sqrt(sd1^2 + sd2^2)
-    pt(qt(sig.level/tside, nu, lower.tail = FALSE), nu, ncp = sqrt(n)*delta/sd,
+    nu <- min(n) - 1
+    sd <- sqrt(sd1^2/n[1] + sd2^2/n[2])
+    pt(qt(sig.level/tside, nu, lower.tail = FALSE), nu, ncp = delta/sd,
        lower.tail = FALSE)
   })
   if (is.null(power))
     power <- eval(p.body)
   else if (is.null(n))
-    n <- uniroot(function(n) eval(p.body) - power, c(2, 1e+07),
-                 tol = tol, extendInt = "upX")$root
+    n <- optim(c(5,5), function(n){ abs(eval(p.body) - power) }, 
+               method = "Nelder-Mead", control = list(abstol = abstol))$par
   else if (is.null(sd1))
     sd1 <- uniroot(function(sd1) eval(p.body) - power, delta *
                     c(1e-07, 1e+07), tol = tol, extendInt = "downX")$root
@@ -49,9 +50,9 @@ power.hsu.t.test <- function (n = NULL, delta = NULL, sd1 = 1, sd2 = 1,
     sig.level <- uniroot(function(sig.level) eval(p.body) -
                            power, c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
   else stop("internal error", domain = NA)
-  NOTE <- "n is number in *each* group"
+  NOTE <- "unequal sample sizes per group (allowed)"
   METHOD <- "Two-sample Hsu t test power calculation"
-  structure(list(n = n, delta = delta, sd1 = sd1, sd2 = sd2, sig.level = sig.level,
-                 power = power, alternative = alternative, note = NOTE,
-                 method = METHOD), class = "power.htest")
+  structure(list(n1 = n[1], n2 = n[2], delta = delta, sd1 = sd1, sd2 = sd2, 
+                 sig.level = sig.level, power = power, alternative = alternative, 
+                 note = NOTE, method = METHOD), class = "power.htest")
 }
