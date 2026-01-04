@@ -6,7 +6,7 @@
   Student (equal variances), Welch, Hsu, Xiao, permutation and boostrap t-tests.
 }
 \usage{
-sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL, 
+sim.power.t.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL, 
                  sig.level = 0.05, conf.int = FALSE, mu = 0, 
                  alternative = c("two.sided", "less", "greater"), 
                  methods = c("student", "welch", "hsu", "xiao"),
@@ -15,10 +15,10 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
 }
 \arguments{
  \item{nx}{ single numeric, sample size of first group.}
- \item{rx}{ function to simulate the values of first group (assuming H1).}
+ \item{rx}{ \code{NULL} or function to simulate the values of first group (assuming H1).}
  \item{rx.H0}{ \code{NULL} or function to simulate the values of first group (assuming H0).}
  \item{ny}{ single numeric, sample size of second group.}
- \item{ry}{ function to simulate the values of second group (assuming H1).}
+ \item{ry}{ \code{NULL} or function to simulate the values of second group (assuming H1).}
  \item{ry.H0}{ \code{NULL} or function to simulate the values of second group (assuming H0).}
  \item{sig.level}{ significance level (type I error probability)}
  \item{conf.int}{ logical, shall confidence intervals be computed. 
@@ -40,9 +40,12 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
     using the maximum number of available cores - 1.}
 }
 \details{
-  Functions \code{rx} and \code{ry} are used to simulate the data under the
+  If specified, functions \code{rx} and \code{ry} are used to simulate the data under the
   alternative hypothesis H1. If specified, functions \code{rx.H0} and \code{ry.H0}
   simulte the data unter the null hypothesis H0.
+
+  At least one pair of functions has to be provided, either \code{rx} and \code{ry}
+  or \code{rx.H0} and \code{ry.H0}.
   
   For fast computations functions from package \code{matrixTests} are used.
 }
@@ -80,6 +83,14 @@ sim.power.t.test(nx, rx, rx.H0 = NULL, ny, ry, ry.H0 = NULL,
   sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm,
                    ny = 5, ry = function(n) rnorm(n, mean = 2), 
                    ry.H0 = rnorm, methods = c("student", "welch"))
+  ## only power
+  sim.power.t.test(nx = 5, rx = rnorm, 
+                   ny = 5, ry = function(n) rnorm(n, mean = 2), 
+                   methods = c("student", "welch"))
+  ## only type I error
+  sim.power.t.test(nx = 5, rx.H0 = rnorm,
+                   ny = 5, ry.H0 = rnorm, 
+                   methods = c("student", "welch"))
   
   ## Unequal variance, small sample size
   power.welch.t.test(n = 5, delta = 5, sd1 = 1, sd2 = 3)

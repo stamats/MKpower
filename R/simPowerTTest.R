@@ -148,6 +148,7 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
                               alternative = alternative, 
                               null = mu, conf.level = conf.level)
       }
+      df <- min(nx, ny) - 1
       res.H0$df <- df
       if(alternative == "less"){
         res.H0$pvalue <- pt(res.H0$statistic, df = df)
@@ -287,19 +288,21 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
   ## Permutation Student 2-sample t-test
   #########################################################
   if("perm.student" %in% methods){
+    if(parallel){
+      row.perm.stud <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
+        tmp <- perm.t.test(x = xy[1:nx], 
+                           y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
+                           conf.level = conf.level, mu = mu, 
+                           alternative = alternative, R = R, 
+                           useCombn = useCombn)
+        res <- c(tmp$statistic, tmp$perm.p.value, 
+                 tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                 tmp$perm.estimate, tmp$perm.stderr)
+        res
+      }
+    }
     if(SIM.POW){
       if(parallel){
-        row.perm.stud <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
-          tmp <- perm.t.test(x = xy[1:nx], 
-                             y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
-                             conf.level = conf.level, mu = mu, 
-                             alternative = alternative, R = R, 
-                             useCombn = useCombn)
-          res <- c(tmp$statistic, tmp$perm.p.value, 
-                   tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                   tmp$perm.estimate, tmp$perm.stderr)
-          res
-        }
         data.comb <- cbind(data.x, data.y)
         res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.stud, 
                          nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
@@ -358,19 +361,21 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
   ## Permutation Welch 2-sample t-test
   #########################################################
   if("perm.welch" %in% methods){
+    if(parallel){
+      row.perm.welch <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
+        tmp <- perm.t.test(x = xy[1:nx], 
+                           y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
+                           conf.level = conf.level, mu = mu, 
+                           alternative = alternative, R = R, 
+                           useCombn = useCombn)
+        res <- c(tmp$statistic, tmp$perm.p.value, 
+                 tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
+                 tmp$perm.estimate, tmp$perm.stderr)
+        res
+      }
+    }
     if(SIM.POW){
       if(parallel){
-        row.perm.welch <- function(xy, nx, ny, conf.level, mu, alternative, R, useCombn){
-          tmp <- perm.t.test(x = xy[1:nx], 
-                             y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
-                             conf.level = conf.level, mu = mu, 
-                             alternative = alternative, R = R, 
-                             useCombn = useCombn)
-          res <- c(tmp$statistic, tmp$perm.p.value, 
-                   tmp$R.true, tmp$perm.conf.int[1], tmp$perm.conf.int[2],
-                   tmp$perm.estimate, tmp$perm.stderr)
-          res
-        }
         data.comb <- cbind(data.x, data.y)
         res <- parRapply(cl = cl, x = data.comb, FUN = row.perm.welch, 
                          nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
@@ -429,18 +434,20 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
   ## Bootstrap Student 2-sample t-test
   #########################################################
   if("boot.student" %in% methods){
+    if(parallel){
+      row.boot.stud <- function(xy, nx, ny, conf.level, mu, alternative, R){
+        tmp <- boot.t.test(x = xy[1:nx], 
+                           y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
+                           conf.level = conf.level, mu = mu, 
+                           alternative = alternative, R = R)
+        res <- c(tmp$statistic, tmp$boot.p.value, 
+                 tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                 tmp$boot.estimate, tmp$boot.stderr)
+        res
+      }
+    }
     if(SIM.POW){
       if(parallel){
-        row.boot.stud <- function(xy, nx, ny, conf.level, mu, alternative, R){
-          tmp <- boot.t.test(x = xy[1:nx], 
-                             y = xy[(nx+1):(nx+ny)], var.equal = TRUE, 
-                             conf.level = conf.level, mu = mu, 
-                             alternative = alternative, R = R)
-          res <- c(tmp$statistic, tmp$boot.p.value, 
-                   tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                   tmp$boot.estimate, tmp$boot.stderr)
-          res
-        }
         data.comb <- cbind(data.x, data.y)
         res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.stud, 
                          nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
@@ -498,18 +505,20 @@ sim.power.t.test <- function(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 =
   ## Bootstrap Welch 2-sample t-test
   #########################################################
   if("boot.welch" %in% methods){
+    if(parallel){
+      row.boot.welch <- function(xy, nx, ny, conf.level, mu, alternative, R){
+        tmp <- boot.t.test(x = xy[1:nx], 
+                           y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
+                           conf.level = conf.level, mu = mu, 
+                           alternative = alternative, R = R)
+        res <- c(tmp$statistic, tmp$boot.p.value, 
+                 tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
+                 tmp$boot.estimate, tmp$boot.stderr)
+        res
+      }
+    }
     if(SIM.POW){
       if(parallel){
-        row.boot.welch <- function(xy, nx, ny, conf.level, mu, alternative, R){
-          tmp <- boot.t.test(x = xy[1:nx], 
-                             y = xy[(nx+1):(nx+ny)], var.equal = FALSE, 
-                             conf.level = conf.level, mu = mu, 
-                             alternative = alternative, R = R)
-          res <- c(tmp$statistic, tmp$boot.p.value, 
-                   tmp$R, tmp$boot.conf.int[1], tmp$boot.conf.int[2],
-                   tmp$boot.estimate, tmp$boot.stderr)
-          res
-        }
         data.comb <- cbind(data.x, data.y)
         res <- parRapply(cl = cl, x = data.comb, FUN = row.boot.welch, 
                          nx = nx, ny = ny, conf.level = 1-sig.level, mu = mu, 
@@ -585,7 +594,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   RES <- NULL
   if("Student" %in% names(x)){
     cat("\n    Student Two-sample t-Test\n")
-    y1 <- c("emp.power" = sum(x$Student$H1$pvalue < alpha)/iter)
+    y1 <- NULL
+    if(!is.null(x$Student$H1)){
+      y1 <- c("emp.power" = sum(x$Student$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Student$H0)){
       y1 <- c(y1, "emp.type.I.error" = sum(x$Student$H0$pvalue < alpha)/iter)
     }
@@ -595,7 +607,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Welch" %in% names(x)){
     cat("\n    Welch Two-sample t-Test\n")
-    y2 <- c("emp.power" = sum(x$Welch$H1$pvalue < alpha)/iter)
+    y2 <- NULL
+    if(!is.null(x$Welch$H1)){
+      y2 <- c("emp.power" = sum(x$Welch$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Welch$H0)){
       y2 <- c(y2, "emp.type.I.error" = sum(x$Welch$H0$pvalue < alpha)/iter)
     }
@@ -605,7 +620,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Hsu" %in% names(x)){
     cat("\n    Hsu Two-sample t-Test\n")
-    y3 <- c("emp.power" = sum(x$Hsu$H1$pvalue < alpha)/iter)
+    y3 <- NULL
+    if(!is.null(x$Hsu$H1)){
+      y3 <- c("emp.power" = sum(x$Hsu$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Hsu$H0)){
       y3 <- c(y3, "emp.type.I.error" = sum(x$Hsu$H0$pvalue < alpha)/iter)
     }
@@ -615,7 +633,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Xiao" %in% names(x)){
     cat("\n    Xiao Two-sample t-Test\n")
-    y4 <- c("emp.power" = sum(x$Xiao$H1$pvalue < alpha)/iter)
+    y4 <- NULL
+    if(!is.null(x$Xiao$H1)){
+      y4 <- c("emp.power" = sum(x$Xiao$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Xiao$H0)){
       y4 <- c(y4, "emp.type.I.error" = sum(x$Xiao$H0$pvalue < alpha)/iter)
     }
@@ -625,7 +646,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Perm.Student" %in% names(x)){
     cat("\n    Permutation Student Two-sample t-Test\n")
-    y5 <- c("emp.power" = sum(x$Perm.Student$H1$pvalue < alpha)/iter)
+    y5 <- NULL
+    if(!is.null(x$Perm.Student$H1)){
+      y5 <- c("emp.power" = sum(x$Perm.Student$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Perm.Student$H0)){
       y5 <- c(y5, "emp.type.I.error" = sum(x$Perm.Student$H0$pvalue < alpha)/iter)
     }
@@ -635,7 +659,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Perm.Welch" %in% names(x)){
     cat("\n    Permutation Welch Two-sample t-Test\n")
-    y6 <- c("emp.power" = sum(x$Perm.Welch$H1$pvalue < alpha)/iter)
+    y6 <- NULL
+    if(!is.null(x$Perm.Welch$H1)){
+      y6 <- c("emp.power" = sum(x$Perm.Welch$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Perm.Welch$H0)){
       y6 <- c(y6, "emp.type.I.error" = sum(x$Perm.Welch$H0$pvalue < alpha)/iter)
     }
@@ -645,7 +672,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Boot.Student" %in% names(x)){
     cat("\n    Bootstrap Student Two-sample t-Test\n")
-    y7 <- c("emp.power" = sum(x$Boot.Student$H1$pvalue < alpha)/iter)
+    y7 <- NULL
+    if(!is.null(x$Boot.Student$H1)){
+      y7 <- c("emp.power" = sum(x$Boot.Student$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Boot.Student$H0)){
       y7 <- c(y7, "emp.type.I.error" = sum(x$Boot.Student$H0$pvalue < alpha)/iter)
     }
@@ -655,7 +685,10 @@ print.sim.power.ttest <- function(x, digits = getOption("digits"), ...){
   }
   if("Boot.Welch" %in% names(x)){
     cat("\n    Bootstrap Welch Two-sample t-Test\n")
-    y8 <- c("emp.power" = sum(x$Boot.Welch$H1$pvalue < alpha)/iter)
+    y8 <- NULL
+    if(!is.null(x$Boot.Welch$H1)){
+      y8 <- c("emp.power" = sum(x$Boot.Welch$H1$pvalue < alpha)/iter)
+    }
     if(!is.null(x$Boot.Welch$H0)){
       y8 <- c(y8, "emp.type.I.error" = sum(x$Boot.Welch$H0$pvalue < alpha)/iter)
     }
