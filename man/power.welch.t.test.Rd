@@ -2,7 +2,7 @@
 \alias{power.welch.t.test}
 \alias{power.welch.t.test2}
 \alias{ssize.welch.t.test}
-\title{Power and Sample Size Calculations for Two-sample Welch t Test}
+\title{Power and Sample Size Calculations for Welch Two-sample t Test}
 \usage{
 power.welch.t.test(n = NULL, delta = NULL, sd1 = 1, sd2 = 1, sig.level = 0.05,
                    power = NULL, alternative = c("two.sided", "one.sided"),
