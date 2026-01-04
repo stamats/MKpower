@@ -73,9 +73,9 @@ sim.ssize.perm.t.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       if(empPower[i] > power) if(BREAK) break
     }
     if(var.equal){
-      METHOD <- "Permutation Student t test"
+      METHOD <- "Permutation Student two-sample t-test"
     }else{
-      METHOD <- "Permutation Welch t test"
+      METHOD <- "Permutation Welch two-sample t-test"
     }
   }
   if(type == "one.sample"){
@@ -100,7 +100,7 @@ sim.ssize.perm.t.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
     }
-    METHOD <- "One-sample t test"
+    METHOD <- "Permutation one-sample t-test"
   }
   if(type == "paired"){
     ns <- seq.int(from = n.min, to = n.max, by = step.size)
@@ -117,7 +117,7 @@ sim.ssize.perm.t.test <- function(rx, ry = NULL, mu = 0, sig.level = 0.05, power
       empPower[i] <- sum(res < sig.level)/iter
       if(empPower[i] > power) if(BREAK) break
     }
-    METHOD <- "Paired t test"
+    METHOD <- "Permutation paired t-test"
   }
   empPower[empPower == 0] <- NA
   names(empPower) <- ns
