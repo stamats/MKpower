@@ -22,8 +22,10 @@
   sizes per group
 - added function ssize.hsu.t.test which allows unequal sample sizes per
   group and minimizes the total sample size (sum of the group sample sizes)
-- added function sim.ssize.perm.t.test to determine sample size (balanced 
-  design) for permutation t tests
+- added function sim.ssize.perm.t.test to determine sample size for 
+  permutation t tests (two-sample test only balanced designs)
+- added function sim.ssize.boot.t.test to determine sample size for 
+  bootstrap t tests (two-sample test only balanced designs)
 
 
 ###########################################################

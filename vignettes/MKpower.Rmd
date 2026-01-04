@@ -95,6 +95,36 @@ power.hsu.t.test2(n = c(39, 62), delta = 0.5, sd1 = 0.5, sd2 = 1)
 ```
 
 
+## Permutation t-Tests
+The required sample size for permutation t-tests can be computed via 
+simulations. Since the computation time is quite high, we don't run the 
+following code.
+
+```{r, eval=FALSE}
+rx <- function(n) rnorm(n, mean = 0, sd = 1) 
+ry <- function(n) rnorm(n, mean = 0.5, sd = 1) 
+sim.ssize.perm.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
+                      var.equal = TRUE)
+```
+
+More examples can be found in section Examples of function sim.ssize.perm.t.test.
+
+
+## Bootstrap t-Tests
+The required sample size for bootstrap t-tests can be computed via 
+simulations. Since the computation time is quite high, we don't run the 
+following code.
+
+```{r, eval=FALSE}
+rx <- function(n) rnorm(n, mean = 0, sd = 1) 
+ry <- function(n) rnorm(n, mean = 0.5, sd = 1) 
+sim.ssize.boot.t.test(rx = rx, ry = ry, n.min = 50, n.max = 100, iter = 1000, 
+                      var.equal = TRUE)
+```
+
+More examples can be found in section Examples of function sim.ssize.boot.t.test.
+
+
 ## ANCOVA
 With function power.ancova one can compute power and sample size in ANCOVA 
 designs [@Shieh2020]. The default matrix of contrasts used in the function is
