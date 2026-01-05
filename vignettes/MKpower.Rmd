@@ -15,11 +15,13 @@ vignette: >
 
 ## Introduction
 The package includes functions for power analysis and sample size calculation 
-for Welch, Hsu [@Hedderich2018] and Xiao [@Xiao2018] as well as permutation [@Janssen1997] 
-and bootstrap [@Davison1997] t tests including Monte-Carlo simulations of empirical power and 
-type-I-error. In addition, power and sample size calculation for Wilcoxon rank sum 
-and signed rank tests via Monte-Carlo simulations can be performed. Moreover, 
-power and sample size required for the evaluation of a 
+for Welch, Hsu [@Hedderich2018] and Xiao [@Xiao2018] tests as well as permutation 
+[@Janssen1997] and bootstrap [@Davison1997] t tests including Monte-Carlo 
+simulations of empirical power and type-I-error. Monte-Carlo simulations of 
+empirical power and type-I-error for conditional two-sample tests.
+In addition, power and sample size calculation for Wilcoxon rank sum 
+and signed rank tests via Monte-Carlo simulations can be performed. 
+Moreover, power and sample size required for the evaluation of a 
 diagnostic test(-system) [@Flahault2005; @Dobbin2007] as well as for a single 
 proportion [@Fleiss2003], comparing two negative binomial rates [@Zhu2014], 
 ANCOVA [@Shieh2020], reference ranges [@Jennen2005], and multiple primary 
@@ -353,7 +355,8 @@ a practical point of view [@Zimmerman2004; @Rasch2011; @Rochon2012; @Hoekstra201
 
 We provide functions to simulate power and type-I-error of classical [@student1908], 
 Welch [@Welch1947], Hsu [@Hsu1938] and Xiao [@Xiao2018] t-tests as well as of 
-Wilcoxon-Mann-Whitney tests [@Wilcoxon1945; @Mann1947].
+conditional tests (conditional to pre-tests for normality and equal variance) 
+and Wilcoxon-Mann-Whitney tests [@Wilcoxon1945; @Mann1947].
 ```{r}
 ## functions to simulate the data
 ## group 1
@@ -374,6 +377,9 @@ res.t
 res.w <- sim.power.wilcox.test(nx = 10, rx = rx, rx.H0 = rx.H0,
                                ny = 10, ry = ry, ry.H0 = ry.H0)
 res.w
+res.c <- sim.power.cond.test(nx = 10, rx = rx, rx.H0 = rx.H0,
+                             ny = 10, ry = ry, ry.H0 = ry.H0)
+res.c
 ```
 
 For further investigation of the results, we provide some diagnostic plots.
@@ -385,6 +391,9 @@ volcano(res.t, hex = TRUE)
 ##  Wilcoxon-Mann-Whitney tests
 hist(res.w)
 qqunif(res.w, alpha = 0.05)
+## conditional test
+hist(res.c)
+qqunif(res.c, alpha = 0.1)
 ```
 
 We can also generate a volcano plot for the Wilcoxon-Mann-Whitney test, but this

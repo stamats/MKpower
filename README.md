@@ -12,7 +12,8 @@ Power analysis and sample size calculation for Welch, Hsu
 (Xiao (2018), <https://doi.org/10.17654/TS054010021>) as well as permutation 
 (Janssen (1997), <https://doi.org/10.1016/S0167-7152(97)00043-6>) and bootstrap 
 (Davison and Hinkley (1997), ISBN:978-0-511-80284-3) t-tests including 
-Monte-Carlo simulations of empirical power and type-I-error. Power and sample 
+Monte-Carlo simulations of empirical power and type-I-error. Monte-Carlo simulations 
+of empirical power and type-I-error for conditional two-sample tests. Power and sample 
 size calculation for Wilcoxon rank sum and signed rank tests via Monte-Carlo 
 simulations. Power and sample size required for the evaluation of a diagnostic 
 test(-system) (Flahault et al. (2005), <https://doi.org/10.1016/j.jclinepi.2004.12.009>; 
