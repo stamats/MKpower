@@ -257,24 +257,31 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
   iter <- x$SetUp$iter
   sig.level <- x$SetUp$sig.level
   approximate <- x$SetUp$approximate
-  if(approximate){
-    DF <- data.frame(pvalue = c(x$Exact$H1$pvalue,
-                                x$Asymptotic$H1$pvalue,
-                                x$Approximate$H1$pvalue),
-                     test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
-                              rep("Asymptotic Wilcoxon-Mann-Whitney test", iter),
-                              rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
-                     hypothesis = rep("H1", 3*iter))
-  }else{
-    DF <- data.frame(pvalue = c(x$Exact$H1$pvalue,
-                                x$Asymptotic$H1$pvalue),
-                     test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
-                              rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
-                     hypothesis = rep("H1", 2*iter))
+  
+  DF1 <- data.frame(NULL)
+  DF0 <- data.frame(NULL)
+  
+  if(!is.null(x$Exact$H1)){
+    if(approximate){
+      DF1 <- data.frame(pvalue = c(x$Exact$H1$pvalue,
+                                   x$Asymptotic$H1$pvalue,
+                                   x$Approximate$H1$pvalue),
+                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Asymptotic Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
+                        hypothesis = rep("H1", 3*iter))
+    }else{
+      DF1 <- data.frame(pvalue = c(x$Exact$H1$pvalue,
+                                   x$Asymptotic$H1$pvalue),
+                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
+                        hypothesis = rep("H1", 2*iter))
+    }
   }
+  
   if(!is.null(x$Exact$H0)){
     if(approximate){
-      DF1 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
+      DF0 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
                                   x$Asymptotic$H0$pvalue,
                                   x$Approximate$H0$pvalue),
                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
@@ -282,14 +289,15 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
                                 rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
                        hypothesis = rep("H0", 3*iter))
     }else{
-      DF1 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
+      DF0 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
                                    x$Asymptotic$H0$pvalue),
                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
                                 rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
                        hypothesis = rep("H0", 2*iter))
     }
-    DF <- rbind(DF, DF1)
   }
+  DF <- rbind(DF0, DF1)
+  
   if(approximate){
     DF$test <- factor(DF$test, levels = c("Exact Wilcoxon-Mann-Whitney test",
                                           "Asymptotic Wilcoxon-Mann-Whitney test",
@@ -298,7 +306,7 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
     DF$test <- factor(DF$test, levels = c("Exact Wilcoxon-Mann-Whitney test",
                                           "Asymptotic Wilcoxon-Mann-Whitney test"))
   }
-  if(!is.null(x$Exact$H0)){
+  if(!is.null(x$Exact$H0) && !is.null(x$Exact$H1)){
     if(approximate){
       Lab <- round(c(sum(x$Exact$H1$pvalue < sig.level)/iter,
                      sum(x$Asymptotic$H1$pvalue < sig.level)/iter,
@@ -333,7 +341,7 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(hypothesis ~ test, scales = "free_y")
-  }else{
+  }else if(!is.null(x$Exact$H1)){
     if(approximate){
       Lab <- round(c(sum(x$Exact$H1$pvalue < sig.level)/iter,
                      sum(x$Asymptotic$H1$pvalue < sig.level)/iter,
@@ -361,6 +369,96 @@ qqunif.sim.power.wtest <- function(x, color.line = "orange", shape = 19, size = 
                 vjust = 2, inherit.aes = FALSE) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
       facet_grid(~ test)
+  }else{
+    if(approximate){
+      Lab <- round(c(sum(x$Exact$H0$pvalue < sig.level)/iter,
+                     sum(x$Asymptotic$H0$pvalue < sig.level)/iter,
+                     sum(x$Approxmiate$H0$pvalue < sig.level)/iter), 4)
+      Lab <- paste("emp. type-I-error:", Lab)
+      DF.text <- data.frame(test = c("Exact Wilcoxon-Mann-Whitney test",
+                                     "Asymptotic Wilcoxon-Mann-Whitney test",
+                                     "Approximate Wilcoxon-Mann-Whitney test"),
+                            hypothesis = rep("H0", 3),
+                            label = Lab)
+    }else{
+      Lab <- round(c(sum(x$Exact$H0$pvalue < sig.level)/iter,
+                     sum(x$Asymptotic$H0$pvalue < sig.level)/iter), 4)
+      Lab <- paste("emp. type-I-error:", Lab)
+      DF.text <- data.frame(test = c("Exact Wilcoxon-Mann-Whitney test",
+                                     "Asymptotic Wilcoxon-Mann-Whitney test"),
+                            hypothesis = rep("H0", 2),
+                            label = Lab)
+    }
+    gg <- ggplot(DF, aes(sample = .data$pvalue)) + 
+      stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
+      #      stat_qq_band(distribution = "unif", color = "red") +
+      qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
+      geom_text(data = DF.text, aes(x = 0.5, y = Inf, label = .data$label), 
+                vjust = 2, inherit.aes = FALSE) +
+      labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+      facet_grid(~ test)
   }
   gg
 }
+
+qqunif.sim.power.cond.test <- function(x, color.line = "orange", shape = 19, 
+                                       size = 1, alpha = 1, ...){
+  iter <- x$SetUp$iter
+  alpha <- x$SetUp$sig.level
+  
+  DF1 <- data.frame(NULL)
+  DF0 <- data.frame(NULL)
+  
+  if(!is.null(x$H1)){
+    tmp <- data.frame(pvalue = x$H1$pvalue,
+                      test = rep("Conditional two-sample t-test", iter),
+                      hypothesis = rep("H1", iter))
+    DF1 <- rbind(DF1, tmp)
+  }
+  
+  if(!is.null(x$H0)){
+    tmp <- data.frame(pvalue = x$H0$pvalue,
+                      test = rep("Conditional two-sample t-test", iter),
+                      hypothesis = rep("H0", iter))
+    DF0 <- rbind(DF0, tmp)
+  }
+  DF <- rbind(DF0, DF1)
+  
+  Lab1 <- Lab0 <- NULL
+  if(!is.null(x$H1)){
+    Lab1 <- c(Lab1, sum(x$H1$pvalue < alpha)/nrow(x$H1))
+  }
+  if(!is.null(x$H0)){
+    Lab0 <- c(Lab0, sum(x$H0$pvalue < alpha)/nrow(x$H0))
+  }
+  
+  if(!is.null(Lab1)) Lab1 <- paste0("emp. power: ", Lab1)
+  if(!is.null(Lab0)) Lab0 <- paste0("emp. type-I-error: ", Lab0)
+  
+  if(!is.null(Lab0) && !is.null(Lab1)){
+    gg <- ggplot(data = DF, aes(sample = .data$pvalue)) + 
+      stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
+      #      stat_qq_band(distribution = "unif", color = "red") +
+      qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
+      labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+      facet_grid(~ hypothesis) + ggtitle("Conditional two-sample test")
+  }
+  if(is.null(Lab0) && !is.null(Lab1)){
+    gg <- ggplot(data = DF, aes(sample = .data$pvalue)) + 
+      stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
+      #      stat_qq_band(distribution = "unif", color = "red") +
+      qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
+      labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+      ggtitle("Conditional two-sample test")
+  }
+  if(!is.null(Lab0) && is.null(Lab1)){
+    gg <- ggplot(data = DF, aes(sample = .data$pvalue)) + 
+      stat_qq_point(distribution = "unif", shape = shape, size = size, alpha = alpha) +
+      #      stat_qq_band(distribution = "unif", color = "red") +
+      qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
+      labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+      ggtitle("Conditional two-sample test")
+  }
+  gg
+}
+

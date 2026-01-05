@@ -41,19 +41,24 @@ qqunif(x, \dots)
 %\note{}
 %\seealso{}
 \examples{
-## default
-qqunif(runif(100))
-
-## visualization of empirical power and type-I-error
-res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
-                        ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
-                        ry.H0 = function(x) rnorm(x, sd = 3),
-                        methods = c("student", "welch"))
-qqunif(res1, alpha = 0.1)
-
-res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
-                      ny = 6, ry = function(x) rnorm(x, mean = 2), 
-                      ry.H0 = rnorm)
-qqunif(res2)
+  ## default
+  qqunif(runif(100))
+  
+  ## visualization of empirical power and type-I-error
+  res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
+                           ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
+                           ry.H0 = function(x) rnorm(x, sd = 3),
+                           methods = c("student", "welch"))
+  qqunif(res1, alpha = 0.1)
+  
+  res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
+                                ny = 6, ry = function(x) rnorm(x, mean = 2), 
+                                ry.H0 = rnorm)
+  qqunif(res2)
+  
+  res3 <- sim.power.cond.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
+                              ny = 6, ry = function(x) rnorm(x, mean = 2), 
+                              ry.H0 = rnorm)
+  qqunif(res3)
 }
 \keyword{hplot}
