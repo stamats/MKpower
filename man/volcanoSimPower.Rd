@@ -48,7 +48,7 @@
                           ry.H0 = function(x) rnorm(x, sd = 3),
                           methods = c("student", "welch"))
   volcano(res1)
-  \donttest{
+\dontrun{
   ## low number of iterations to reduce computation time
   res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
                         ny = 6, ry = function(x) rnorm(x, mean = 2), 

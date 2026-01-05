@@ -300,29 +300,36 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
   mu <- x$SetUp$mu
   sig.level <- x$SetUp$sig.level
   approximate <- x$SetUp$approximate
-  if(approximate){
-    DF <- data.frame(pvalue = c(x$Exact$H1$pvalue,
-                                x$Asymptotic$H1$pvalue,
-                                x$Approximate$H1$pvalue),
-                     MD = c(x$Exact$H1$loc.diff,
-                            x$Asymptotic$H1$loc.diff,
-                            x$Approximate$H1$loc.diff),
-                     test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
-                              rep("Asymptotic Wilcoxon-Mann-Whitney test", iter),
-                              rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
-                     hypothesis = rep("H1", 3*iter))
-  }else{
-    DF <- data.frame(pvalue = c(x$Exact$H1$pvalue,
-                                x$Asymptotic$H1$pvalue),
-                     MD = c(x$Exact$H1$loc.diff,
-                            x$Asymptotic$H1$loc.diff),
-                     test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
-                              rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
-                     hypothesis = rep("H1", 2*iter))
-  }
-  if(!is.null(x$Classical$H0)){
+  
+  DF1 <- data.frame(NULL)
+  DF0 <- data.frame(NULL)
+  
+  if(!is.null(x$Exact$H1)){
     if(approximate){
-      DF1 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
+      DF1 <- data.frame(pvalue = c(x$Exact$H1$pvalue,
+                                   x$Asymptotic$H1$pvalue,
+                                   x$Approximate$H1$pvalue),
+                        MD = c(x$Exact$H1$loc.diff,
+                               x$Asymptotic$H1$loc.diff,
+                               x$Approximate$H1$loc.diff),
+                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Asymptotic Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
+                        hypothesis = rep("H1", 3*iter))
+    }else{
+      DF1 <- data.frame(pvalue = c(x$Exact$H1$pvalue,
+                                   x$Asymptotic$H1$pvalue),
+                        MD = c(x$Exact$H1$loc.diff,
+                               x$Asymptotic$H1$loc.diff),
+                        test = c(rep("Exact Wilcoxon-Mann-Whitney test", iter),
+                                 rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
+                        hypothesis = rep("H1", 2*iter))
+    }
+  }
+  
+  if(!is.null(x$Exact$H0)){
+    if(approximate){
+      DF0 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
                                    x$Asymptotic$H0$pvalue,
                                    x$Approximate$H0$pvalue),
                         MD = c(x$Exact$H0$loc.diff,
@@ -333,7 +340,7 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
                                  rep("Approximate Wilcoxon-Mann-Whitney test", iter)),
                         hypothesis = rep("H0", 3*iter))
     }else{
-      DF1 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
+      DF0 <- data.frame(pvalue = c(x$Exact$H0$pvalue,
                                    x$Asymptotic$H0$pvalue),
                         MD = c(x$Exact$H0$loc.diff,
                                x$Asymptotic$H0$loc.diff),
@@ -341,8 +348,9 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
                                  rep("Asymptotic Wilcoxon-Mann-Whitney test", iter)),
                         hypothesis = rep("H0", 2*iter))
     }
-    DF <- rbind(DF, DF1)
   }
+  DF <- rbind(DF0, DF1)
+  
   if(approximate){
     DF$test <- factor(DF$test, levels = c("Exact Wilcoxon-Mann-Whitney test",
                                           "Asymptotic Wilcoxon-Mann-Whitney test",
@@ -351,7 +359,7 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
     DF$test <- factor(DF$test, levels = c("Exact Wilcoxon-Mann-Whitney test",
                                           "Asymptotic Wilcoxon-Mann-Whitney test"))
   }
-  if(!is.null(x$Classical$H0)){
+  if(!is.null(x$Exact$H0) && is.null(x$Exact$H1)){
     if(approximate){
       Lab <- round(c(sum(x$Exact$H1$pvalue < sig.level)/iter,
                      sum(x$Asymptotic$H1$pvalue < sig.level)/iter,
@@ -399,7 +407,7 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
         geom_hline(yintercept = sig.level) +
         facet_grid(hypothesis ~ test, scales = "free_y")
     }
-  }else{
+  }else if(!is.null(x$Exact$H1)){
     if(approximate){
       Lab <- round(c(sum(x$Exact$H1$pvalue < sig.level)/iter,
                      sum(x$Asymptotic$H1$pvalue < sig.level)/iter,
@@ -417,6 +425,45 @@ volcano.sim.power.wtest <- function(x, alpha = 1, shape = 19,
       DF.text <- data.frame(test = c("Exact Wilcoxon-Mann-Whitney test",
                                      "Asymptotic Wilcoxon-Mann-Whitney test"),
                             hypothesis = rep("H1", 2),
+                            label = Lab)
+    }
+    if(hex){
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
+        geom_hex(bins = bins) + scale_y_neglog10()+
+        geom_vline(xintercept = mu) + 
+        xlab("mean difference") + ylab("-log10(p value)") +
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
+                  vjust = 2, inherit.aes = FALSE) +
+        geom_hline(yintercept = sig.level) +
+        facet_grid(~ test)
+    }else{
+      gg <- ggplot(DF, aes(x = .data$MD, y = .data$pvalue)) + 
+        geom_point(alpha = alpha, shape = shape) + scale_y_neglog10()+
+        geom_vline(xintercept = mu) + 
+        xlab("mean difference") + ylab("-log10(p value)") +
+        geom_text(data = DF.text, aes(x = mu, y = Inf, label = .data$label), 
+                  vjust = 2, inherit.aes = FALSE) +
+        geom_hline(yintercept = sig.level) +
+        facet_grid(~ test)
+    }
+  }else{
+    if(approximate){
+      Lab <- round(c(sum(x$Exact$H0$pvalue < sig.level)/iter,
+                     sum(x$Asymptotic$H0$pvalue < sig.level)/iter,
+                     sum(x$Approxmiate$H0$pvalue < sig.level)/iter), 4)
+      Lab <- paste("emp. power:", Lab)
+      DF.text <- data.frame(test = c("Exact Wilcoxon-Mann-Whitney test",
+                                     "Asymptotic Wilcoxon-Mann-Whitney test",
+                                     "Approximate Wilcoxon-Mann-Whitney test"),
+                            hypothesis = rep("H0", 3),
+                            label = Lab)
+    }else{
+      Lab <- round(c(sum(x$Exact$H0$pvalue < sig.level)/iter,
+                     sum(x$Asymptotic$H0$pvalue < sig.level)/iter), 4)
+      Lab <- paste("emp. power:", Lab)
+      DF.text <- data.frame(test = c("Exact Wilcoxon-Mann-Whitney test",
+                                     "Asymptotic Wilcoxon-Mann-Whitney test"),
+                            hypothesis = rep("H0", 2),
                             label = Lab)
     }
     if(hex){

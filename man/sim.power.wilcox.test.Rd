@@ -67,7 +67,7 @@ sim.power.wilcox.test(nx, rx = NULL, rx.H0 = NULL, ny, ry = NULL, ry.H0 = NULL,
 \code{\link[matrixTests]{wilcoxon}}}
 \examples{
 ## Equal variance, small sample size
-power.t.test(n = 5, power = 0.8)
+power.t.test(n = 6, power = 0.8)
 sim.ssize.wilcox.test(rx = rnorm, ry = function(x) rnorm(x, mean = 2), 
                       power = 0.8, n.min = 3, n.max = 10, step.size = 1)
 sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
