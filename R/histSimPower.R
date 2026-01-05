@@ -411,7 +411,8 @@ hist.sim.power.cond.test <- function(x, color.hline = "orange", ...){
     gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 
       geom_histogram(aes(y = after_stat(density)), binwidth = 0.01) + 
       geom_hline(yintercept = 1.0, color = color.hline) + xlab("p value") +
-      facet_grid(~ hypothesis) + ggtitle("Conditional two-sample test")
+      facet_grid(rows = vars(.data$hypothesis), scales = "free_y") + 
+      ggtitle("Conditional two-sample test")
   }
   if(is.null(Lab0) && !is.null(Lab1)){
     gg <- ggplot(data = DF, aes(x = .data$pvalue)) + 

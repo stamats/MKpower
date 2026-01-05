@@ -441,7 +441,7 @@ qqunif.sim.power.cond.test <- function(x, color.line = "orange", shape = 19,
       #      stat_qq_band(distribution = "unif", color = "red") +
       qqplotr::stat_qq_line(distribution = "unif", color = color.line) +
       labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
-      facet_grid(~ hypothesis) + ggtitle("Conditional two-sample test")
+      facet_grid(rows = vars(.data$hypothesis)) + ggtitle("Conditional two-sample test")
   }
   if(is.null(Lab0) && !is.null(Lab1)){
     gg <- ggplot(data = DF, aes(sample = .data$pvalue)) + 
